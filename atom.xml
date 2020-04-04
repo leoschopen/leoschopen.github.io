@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-03T08:45:59.383Z</updated>
+  <updated>2020-04-04T14:24:26.658Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据库原理中函数依赖，函数依赖集，属性集闭包</title>
+    <link href="http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/"/>
+    <id>http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/</id>
+    <published>2020-04-04T12:51:00.000Z</published>
+    <updated>2020-04-04T14:24:26.658Z</updated>
+    
+    <content type="html"><![CDATA[<p>#数据库原理中函数依赖，函数依赖集，属性集闭包<br><strong>理论准备：</strong><br><strong><em>Armstrong公理</em></strong><br>F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;<br>F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；<br>F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；<br>F4(伪增性)：若X→Y，W≥Z(<strong>表W包含Z</strong>）为F所蕴涵，则XW→YZ为F所蕴涵；<br>—————（XZ→YZ,Z换成更大的W）<br>F5(伪传性): 若X→Y，YW→Z为F所蕴涵, 则XW→Z为F所蕴涵；（增广加传递）<br>F6(合成性): 若X→Y,X→Z为F所蕴涵，则X→YZ为F所蕴涵；<br>F7(分解性): 若X→Y,Z≤Y (<strong>表Z包含于Y</strong>）为F所蕴涵，则X→Z为F所蕴涵。</p><p>F:函数依赖集<br>U:属性集U={A1,A2,…,An}<br>R(U):属性集上面的一个关系模式</p><hr><p><strong>正文：</strong><br>###蕴涵&amp;逻辑蕴涵：</p><hr><p><strong><em>蕴涵：A蕴含B,记为”A→B”</em></strong><br><strong><em>逻辑蕴涵：</em></strong>1，例：关系模式 R=(A,B,C),函数依赖集F={A→B,B→C}, F逻辑蕴涵A→C</p><hr><p>###闭包&amp;属性（集）闭包</p><hr><p>1，闭包：若F为关系模式R(U)的函数依赖集，我们把F以及所有被F逻辑蕴涵的函数依赖的集合称为F的闭包，记为F+<br>即：F+={X→Y|X→Y∈F∨“应用Armstong公理从F中导出的任何X→Y”}</p><p>2，F+，里面的元素是函数依赖（就是X→Y这种东西）<br>XF+，里面的元素是属性，这些属性是F根据Armstrong 公理推导出来的<br><code>(定义: 设关系模式R(U，F )，U 为其属性集，F 为其函数依赖集，则称在所有用Armstrong 公理从F 推出的函数依赖X → Ai 中，Ai 的属性集合为X 的属性闭包。)</code></p><p><strong><em>一个重要的定理：X→Y属于F+，等价于Y属于XF+。X,Y都是U中的属性。</em></strong>（引理4）</p><hr><p>###覆盖</p><hr><p>F+=G+ 等价于F包含于G+且G包含于F+，称F和G是等价的，也称F覆盖G或者G覆盖F。<br>证明：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/1.jpg" alt="引理5的证明" title="引理5的证明">                </div>                <div class="image-caption">引理5的证明</div>            </figure><p>为验证F、G是否等价，需要对任一X→Y属于F+检验是否X→Y属于G+, 由引理4可将这种检验转为是否<br>Y是否属于X关于F的闭包由此可将求F+这种不容易完成的事转为容易完成的事，即求属性闭包。</p><p><strong>属性闭包的计算算法</strong><br>求属性闭包的目的是为了判断一个函数依赖是否被一个F所蕴涵</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/2.jpg" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/3.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;#数据库原理中函数依赖，函数依赖集，属性集闭包&lt;br&gt;&lt;strong&gt;理论准备：&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;&lt;em&gt;Armstrong公理&lt;/em&gt;&lt;/strong&gt;&lt;br&gt;F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;&lt;br&gt;F2(增广性)
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>dog cc</title>

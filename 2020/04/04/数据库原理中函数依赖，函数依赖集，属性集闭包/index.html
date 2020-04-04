@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>数据库原理中函数依赖，函数依赖集，属性集闭包 | Leo&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="#数据库原理中函数依赖，函数依赖集，属性集闭包理论准备：Armstrong公理F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；F4(伪增性)：若X→Y，W≥Z(表W包含Z）为F所蕴涵，则XW→YZ为F所蕴涵；—————（XZ→YZ,Z换成更大的W）F5(伪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库原理中函数依赖，函数依赖集，属性集闭包">
+<meta property="og:url" content="http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="#数据库原理中函数依赖，函数依赖集，属性集闭包理论准备：Armstrong公理F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；F4(伪增性)：若X→Y，W≥Z(表W包含Z）为F所蕴涵，则XW→YZ为F所蕴涵；—————（XZ→YZ,Z换成更大的W）F5(伪">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/3.png">
+<meta property="article:published_time" content="2020-04-04T12:51:00.000Z">
+<meta property="article:modified_time" content="2020-04-04T14:24:26.658Z">
+<meta property="article:author" content="Leo Schopen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/1.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Leo&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Leo Schopen</h5>
+          <a href="mailto:leoschopen@gmail.com" title="leoschopen@gmail.com" class="mail">leoschopen@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/leoschopen" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://weibo.com/6611153997/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">数据库原理中函数依赖，函数依赖集，属性集闭包</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">数据库原理中函数依赖，函数依赖集，属性集闭包</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-04-04T12:51:00.000Z" itemprop="datePublished" class="page-time">
+  2020-04-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-数据库原理中函数依赖，函数依赖集，属性集闭包"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">数据库原理中函数依赖，函数依赖集，属性集闭包</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-04-04 20:51:00" datetime="2020-04-04T12:51:00.000Z"  itemprop="datePublished">2020-04-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>#数据库原理中函数依赖，函数依赖集，属性集闭包<br><strong>理论准备：</strong><br><strong><em>Armstrong公理</em></strong><br>F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;<br>F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；<br>F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；<br>F4(伪增性)：若X→Y，W≥Z(<strong>表W包含Z</strong>）为F所蕴涵，则XW→YZ为F所蕴涵；<br>—————（XZ→YZ,Z换成更大的W）<br>F5(伪传性): 若X→Y，YW→Z为F所蕴涵, 则XW→Z为F所蕴涵；（增广加传递）<br>F6(合成性): 若X→Y,X→Z为F所蕴涵，则X→YZ为F所蕴涵；<br>F7(分解性): 若X→Y,Z≤Y (<strong>表Z包含于Y</strong>）为F所蕴涵，则X→Z为F所蕴涵。</p>
+<p>F:函数依赖集<br>U:属性集U={A1,A2,…,An}<br>R(U):属性集上面的一个关系模式</p>
+<hr>
+<p><strong>正文：</strong><br>###蕴涵&amp;逻辑蕴涵：</p>
+<hr>
+<p><strong><em>蕴涵：A蕴含B,记为”A→B”</em></strong><br><strong><em>逻辑蕴涵：</em></strong>1，例：关系模式 R=(A,B,C),函数依赖集F={A→B,B→C}, F逻辑蕴涵A→C</p>
+<hr>
+<p>###闭包&amp;属性（集）闭包</p>
+<hr>
+<p>1，闭包：若F为关系模式R(U)的函数依赖集，我们把F以及所有被F逻辑蕴涵的函数依赖的集合称为F的闭包，记为F+<br>即：F+={X→Y|X→Y∈F∨“应用Armstong公理从F中导出的任何X→Y”}</p>
+<p>2，F+，里面的元素是函数依赖（就是X→Y这种东西）<br>XF+，里面的元素是属性，这些属性是F根据Armstrong 公理推导出来的<br><code>(定义: 设关系模式R(U，F )，U 为其属性集，F 为其函数依赖集，则称在所有用Armstrong 公理从F 推出的函数依赖X → Ai 中，Ai 的属性集合为X 的属性闭包。)</code></p>
+<p><strong><em>一个重要的定理：X→Y属于F+，等价于Y属于XF+。X,Y都是U中的属性。</em></strong>（引理4）</p>
+<hr>
+<p>###覆盖</p>
+<hr>
+<p>F+=G+ 等价于F包含于G+且G包含于F+，称F和G是等价的，也称F覆盖G或者G覆盖F。<br>证明：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/1.jpg" alt="引理5的证明" title="引理5的证明">
+                </div>
+                <div class="image-caption">引理5的证明</div>
+            </figure>
+
+
+<p>为验证F、G是否等价，需要对任一X→Y属于F+检验是否X→Y属于G+, 由引理4可将这种检验转为是否<br>Y是否属于X关于F的闭包由此可将求F+这种不容易完成的事转为容易完成的事，即求属性闭包。</p>
+<p><strong>属性闭包的计算算法</strong><br>求属性闭包的目的是为了判断一个函数依赖是否被一个F所蕴涵</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/2.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<hr>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/3.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<hr>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-04-04T14:24:26.658Z" itemprop="dateUpdated">2020-04-04 22:24:26</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="Leo Schopen">
+            Leo Schopen
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&title=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&title=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/04/03/dog-cc/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">dog cc</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Leo Schopen &copy; 2020</span>
+            <span>
+                
+                Power by <a href="" target="_blank">Leo</a> 
+            </span>
+        </p>
+    </div>
+</footer>
+<!--添加网站的运行时间-->
+<section class="footer-time">
+    <span class="footer__copyright">
+    <div>
+    <span id="span_dt_dt"> </span>
+    <script language="javascript">
+      function show_date_time(){
+        window.setTimeout("show_date_time()", 1000);
+        BirthDay=new Date("3/31/2020 20:00:00");//这个日期是可以修改的
+        today=new Date();
+        timeold=(today.getTime()-BirthDay.getTime());//其实仅仅改了这里
+        sectimeold=timeold/1000
+        secondsold=Math.floor(sectimeold);
+        msPerDay=24*60*60*1000
+        e_daysold=timeold/msPerDay
+        daysold=Math.floor(e_daysold);
+        e_hrsold=(e_daysold-daysold)*24;
+        hrsold=Math.floor(e_hrsold);
+        e_minsold=(e_hrsold-hrsold)*60;
+        minsold=Math.floor((e_hrsold-hrsold)*60);
+        seconds=Math.floor((e_minsold-minsold)*60);
+        span_dt_dt.innerHTML="Leo's博客已经运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+      }
+      show_date_time();
+    </script>
+    </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+</section>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&title=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&title=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《数据库原理中函数依赖，函数依赖集，属性集闭包》 — Leo's Blog&url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,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" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '你去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
