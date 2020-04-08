@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-05T05:56:35.189Z</updated>
+  <updated>2020-04-08T02:04:17.290Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,25 +17,26 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>April 5th English Notes</title>
+    <title>April 8th English Notes</title>
     <link href="http://yoursite.com/2020/04/05/April-5th-English-Notes/"/>
     <id>http://yoursite.com/2020/04/05/April-5th-English-Notes/</id>
-    <published>2020-04-05T02:31:49.000Z</published>
-    <updated>2020-04-05T05:56:35.189Z</updated>
+    <published>2020-04-05T02:31:00.000Z</published>
+    <updated>2020-04-08T02:04:17.290Z</updated>
     
-    <content type="html"><![CDATA[<p>1，concerns<br>2，a memorial service</p>]]></content>
+    <content type="html"><![CDATA[<p>1, concerns<br>2, a memorial service<br>3, tap water 自来水<br>4, fuel the “walking on eggshells”feeling 加剧了“如履薄冰”的感觉<br>5, aside 在旁边 <code>She pulled the curtain aside.</code></p><blockquote><p>sweep aside <code>sweep human rights aside  对人权置之不顾</code> </p></blockquote><p>6, articles of the contract 合同条款<br><code>contract a project 承包工程</code><br><code>contract for 承办</code>  </p><p>7, arrange for  安排<br>8, training are increasingly important as the body ages<br>9, general practice 全科诊所<br>10, improve fuel efficiency and <strong><em>perfect(使完美)</em></strong>  hybrid(混合动力) vehicles<br>11,  commodity 商品;有用的东西<br>12, work out a solution 制定<br>13, offer onself to the state 为国献身<br>14, add fuel to 加油 v fuel<br>15, the Stock Exchange 证券交易所<br>16, exchange greetings 寒暄<br>17, a side dish 配菜<br>18, meet the criteria 符合标准<br>19, ongoing 进行中的<br>    an ongoing debate<br>    The police investigation is ongoing.</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;1，concerns&lt;br&gt;2，a memorial service&lt;/p&gt;
-
+        &lt;p&gt;1, concerns&lt;br&gt;2, a memorial service&lt;br&gt;3, tap water 自来水&lt;br&gt;4, fuel the “walking on eggshells”feeling 加剧了“如履薄冰”的感觉&lt;br&gt;5, aside 在旁边 &lt;code&gt;
       
     
     </summary>
     
     
+    
+      <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
     
   </entry>
   
@@ -44,7 +45,7 @@
     <link href="http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/"/>
     <id>http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/</id>
     <published>2020-04-04T12:51:00.000Z</published>
-    <updated>2020-04-04T15:10:05.005Z</updated>
+    <updated>2020-04-05T10:52:10.390Z</updated>
     
     <content type="html"><![CDATA[<p><strong>理论准备：</strong><br><strong><em>Armstrong公理</em></strong><br>F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;<br>F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；<br>F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；<br>F4(伪增性)：若X→Y，W≥Z(<strong>表W包含Z</strong>）为F所蕴涵，则XW→YZ为F所蕴涵；<br>—————（XZ→YZ,Z换成更大的W）<br>F5(伪传性): 若X→Y，YW→Z为F所蕴涵, 则XW→Z为F所蕴涵；（增广加传递）<br>F6(合成性): 若X→Y,X→Z为F所蕴涵，则X→YZ为F所蕴涵；<br>F7(分解性): 若X→Y,Z≤Y (<strong>表Z包含于Y</strong>）为F所蕴涵，则X→Z为F所蕴涵。</p><p>F:函数依赖集<br>U:属性集U={A1,A2,…,An}<br>R(U):属性集上面的一个关系模式</p><hr><p><strong>蕴涵&amp;逻辑蕴涵：</strong></p><hr><p><strong><em>蕴涵：A蕴含B,记为”A→B”</em></strong><br><strong><em>逻辑蕴涵：</em></strong>1，例：关系模式 R=(A,B,C),函数依赖集F={A→B,B→C}, F逻辑蕴涵A→C</p><hr><p><strong>闭包&amp;属性（集）闭包</strong></p><hr><p>1，闭包：若F为关系模式R(U)的函数依赖集，我们把F以及所有被F逻辑蕴涵的函数依赖的集合称为F的闭包，记为F+<br>即：F+={X→Y|X→Y∈F∨“应用Armstong公理从F中导出的任何X→Y”}</p><p>2，F+，里面的元素是函数依赖（就是X→Y这种东西）<br>XF+，里面的元素是属性，这些属性是F根据Armstrong 公理推导出来的<br><code>(定义: 设关系模式R(U，F )，U 为其属性集，F 为其函数依赖集，则称在所有用Armstrong 公理从F 推出的函数依赖X → Ai 中，Ai 的属性集合为X 的属性闭包。)</code></p><p><strong><em>一个重要的定理：X→Y属于F+，等价于Y属于XF+。X,Y都是U中的属性。</em></strong>（引理4）</p><hr><p><strong>覆盖</strong></p><hr><p>F+=G+ 等价于F包含于G+且G包含于F+，称F和G是等价的，也称F覆盖G或者G覆盖F。<br>证明：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/1.jpg" alt="引理5的证明" title="引理5的证明">                </div>                <div class="image-caption">引理5的证明</div>            </figure><p>为验证F、G是否等价，需要对任一X→Y属于F+检验是否X→Y属于G+, 由引理4可将这种检验转为是否<br>Y是否属于X关于F的闭包由此可将求F+这种不容易完成的事转为容易完成的事，即求属性闭包。</p><p><strong>属性闭包的计算算法</strong><br>求属性闭包的目的是为了判断一个函数依赖是否被一个F所蕴涵</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/2.jpg" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/3.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr><p><strong>最小覆盖</strong></p><p>就是F中去掉某个函数依赖后如果还是和原来的等价，就可以把这个函数依赖删除，执行完后，剩下的函数依赖集合是最小覆盖</p><hr>]]></content>
     
@@ -58,6 +59,8 @@
     </summary>
     
     
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
@@ -80,8 +83,8 @@
     <title>April 3rd English Notes</title>
     <link href="http://yoursite.com/2020/04/03/April-3th-English-Notes-1/"/>
     <id>http://yoursite.com/2020/04/03/April-3th-English-Notes-1/</id>
-    <published>2020-04-03T01:21:59.000Z</published>
-    <updated>2020-04-05T02:29:07.584Z</updated>
+    <published>2020-04-03T01:21:00.000Z</published>
+    <updated>2020-04-08T02:02:41.882Z</updated>
     
     <content type="html"><![CDATA[<p>a financial sector</p><p>population census</p><a id="more"></a><p>be rated as</p><p>carryout a project</p><p>paliamentary democracy</p><p>project</p><p>drop-out rates</p><p>a means to an end</p><p>assault</p><p>spring</p><p>original</p><p>press conference</p><p>brake pedal</p><p>mattress</p><p>from all sources</p><p>provide the basis 提供依据</p><p>a civil trial</p><p>knowledge base</p><p>set the scene for 为…做好准备</p><p>the adverse impact 负面影响</p><p>at the moment</p><p>variety variable various</p><p>client</p><p>a couple of ad hoc jobs</p><p>methodology</p><p>together the decide</p><p>deterioration</p><p>phase out</p><p>rescue package</p><p>rebound</p><p>layoff</p><p>layout</p><p>realmages</p><p>a procession of     go in procession 列队出行</p><p>issue 刊物，发行</p><p>military exercise/affairs/base/campaign</p><p>foreign policy</p><p>be mean with</p><p>formulate policies</p><p>field trips</p><p>enroll</p><p>auto industry 汽车产业</p><p>administration office 行政办公室</p><p>the Party Congress 党代会</p><p>light/heavy industry 轻重工业</p><p>on account of</p><p>high performance 高性能</p><p>a bombing campaign</p><p>reckon</p><p>significant 大幅的</p><p>medical examination 体检</p><p>casino</p><p>rogue trader</p><p>a tough character 性格强硬</p><p>rock to and fro 前后摇晃</p><p>the principal character 主人公</p><p>upturned</p><p>miner</p><p>take one&#39;s seat 坐在</p><p>theoretical</p><p>real estate agency 房地产公司</p><p>a hardened criminal 一个惯犯</p><p>press on         强加于，向前推进</p><p>perform religious ceremonies 举行宗教仪式</p><p>deprecated</p>]]></content>
     
@@ -94,14 +97,16 @@
     
     
     
+      <category term="Enlish Notes" scheme="http://yoursite.com/tags/Enlish-Notes/"/>
+    
   </entry>
   
   <entry>
     <title>April 2nd English Notes</title>
     <link href="http://yoursite.com/2020/04/02/April-2th-English-Notes/"/>
     <id>http://yoursite.com/2020/04/02/April-2th-English-Notes/</id>
-    <published>2020-04-02T15:33:33.000Z</published>
-    <updated>2020-04-05T02:29:21.069Z</updated>
+    <published>2020-04-02T15:33:00.000Z</published>
+    <updated>2020-04-08T02:02:57.681Z</updated>
     
     <content type="html"><![CDATA[<p>4.1</p><p>1，adhere 黏附; 附着 <strong>adhere to sth</strong> (formal) 坚持，遵守，遵循（法律、规章、指示、信念等）</p><pre><code>For ten months he adhered to a strict no-fat low-salt diet.十个月来他严格坚持无脂肪少盐饮食。</code></pre><a id="more"></a><p>2，dosage 剂量  a high dosage of vitamin C</p><p>3，practitioner (尤指医学或法律界的)从业人员;习艺者;专门人才</p><pre><code>dental practitioners 牙医</code></pre><p>4，otherwise 否则，除此以外</p><pre><code>We’re committed to the project. We wouldn&amp;#39;t be here otherwise.否则我们就不会到这里来了</code></pre><p>5，encounter 遭遇，遇到，邂逅 encountered such resistance 遇到过这么大的阻力</p><p>6，be at risk for you may be at risk for heart disease 你可能有心脏病的风险</p><p>7，Samoa 萨摩亚群岛（太平洋）</p><p>8，Epidemiology 流行病学;传染病学</p><p>9，increased by a factor of 50</p><p>10，World  Meteorological organization世界气象组织</p><p>11,remedy 处理方法;    疗法,药品;    纠正</p><p>no simple remedy for unemployment 失业问题没有简单的解决办法</p><p>a herbal remedy 草药 to remedy a problem 解决问题</p><p>12，hazard n危险；v冒失提出，冒险猜测；（to make a suggestion or guess which you know may be wrong）冒…的风险</p><p>a fire/safety hazard  火灾 / 安全隐患</p><p>Would you like to hazard a guess ? 你想猜猜看吗？</p><p>hazard other people&#39;s lives as well as their own 拿他人和自己的生命冒险</p><p>make teaching one&#39;s career 以教书为生</p><p>provide against… 防备放生某事</p><p><strong>&quot;有关增加的英文表述&quot;</strong></p><pre><code>（1）increase， rise，grow up,beef up等词，当表示&quot;激增、猛增、大幅增加&quot;时，还有像       surge，soar，mount，climb，proliferate等表达方式**（2） 例句：Alibaba is also planning to **beef up ** what it calls &quot;ET Medical Brain&quot;加强As such deals  **proliferated** , economists studied their impact.随着这类协定的激增、its quarterly results included a  **surge ** in revenues of 15%它的季报显示收入激增15%Business education is enjoying  **a surge of**  popularity in Ukraine 在乌克兰的受欢迎     程度激增people with sight problems will  **soar**  in the coming decades有视力问题的人数将会激     增As costs  **skyrocket** 随着开销猛增 prices  **skyrocket**  by more than 2,000%</code></pre><p><strong>&quot;举行的英文表达&quot;</strong></p><ol><li><p>（1）hold,give,stage,host</p></li><li><p>（2）be held [taken place] as scheduled 某事被&quot;举行&quot;,用sth is held by sb 或者sth is taken place in someplace</p><pre><code>stage a strike 举行罢工    stage an uprising;举行起义give a banquet  举行宴会</code></pre></li></ol>]]></content>
     
@@ -114,6 +119,8 @@
     </summary>
     
     
+    
+      <category term="Enlish Notes" scheme="http://yoursite.com/tags/Enlish-Notes/"/>
     
   </entry>
   
