@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-04T11:48:40.902Z</updated>
+  <updated>2020-07-03T08:20:28.269Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hasNext(),next(),nextLine(),hasNextLine()</title>
+    <link href="http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/"/>
+    <id>http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/</id>
+    <published>2020-07-03T08:20:27.000Z</published>
+    <updated>2020-07-03T08:20:28.269Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><p>hasNext（） 是检测 还有没有<strong>下一个</strong>输入</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns true if this scanner has another token in its input.</span></span><br><span class="line"><span class="comment"> * This method may block while waiting for input to scan.</span></span><br><span class="line"><span class="comment"> * The scanner does not advance past any input.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true if and only if this scanner has another token</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalStateException if this scanner is closed</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> java.util.Iterator</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">当执行到hasNext（）时，它会先扫描缓冲区中是否有字符，有则返回<span class="keyword">true</span>,继续扫描。直到扫描为空，这时并不返回<span class="keyword">false</span>,而是将方法阻塞，等待你输入内容然后继续扫描。</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while(!sc.hasNext(&quot;a&quot;))  &#x2F;&#x2F;即以a为结束符号</span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(&quot;键盘输入的内容是：&quot;+ sc.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>next（）是指针移动到当前下标，并<strong>取出下一个</strong>输入</p><pre><code>Scanner sc = new Scanner(System.in);while(sc.hasNext()){    System.out.println(&quot;键盘输入的内容是：&quot; + sc.next());}//依次取出输入内容（空格做分割）</code></pre></li><li><p>nextLine（） 把指针移动到<strong>下一行</strong> 让然后<strong>取出当前这一行</strong>的输入(输出带空格)</p></li><li><p>hasNextLine（） 是检测<strong>下一行</strong>有没有输入</p><hr></li></ul><h3 id="在使用的时候有需要注意的地方："><a href="#在使用的时候有需要注意的地方：" class="headerlink" title="在使用的时候有需要注意的地方："></a><strong>在使用的时候有需要注意的地方：</strong></h3><ul><li><p>　<strong>next()不会吸取字符前/后的空格/Tab键，只吸取字符，开始吸取字符（字符前后不算）直到遇到空格/Tab键/回车截止吸取；</strong></p></li><li><p>　<strong>nextLine()吸取字符前后的空格/Tab键，回车键截止。</strong></p></li></ul>  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"请输入字符串（next）："</span>);</span><br><span class="line">        String str = input.next();</span><br><span class="line">        System.out.println(str);</span><br><span class="line"> </span><br><span class="line">        System.out.println(<span class="string">"请输入字符串（nextLine）："</span>);</span><br><span class="line">        String str1 = input.nextLine();</span><br><span class="line">        System.out.println(str1);</span><br><span class="line">&#125; </span><br><span class="line">输入输出结果:</span><br><span class="line">请输入字符串（next）：</span><br><span class="line">Leo Schopen<span class="comment">//在enter之后即停止</span></span><br><span class="line">Leo</span><br><span class="line">请输入字符串（nextLine）：</span><br><span class="line"> Schopen</span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">请输入字符串（next）：</span><br><span class="line">leo</span><br><span class="line">leo</span><br><span class="line">请输入字符串（nextLine）：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br></pre></td></tr></table></figure><ul><li>出现第一种结果的原因是Leo的后面有空格输入程序自动终止，scanner.next()方法将指针从当前位置指向下一个被<strong>断字符</strong>断开的有效<strong>元素</strong>的末尾，或下一个分隔符号区的起点位置，这样再nextLine的时候就输出空格+Schopen</li><li>出现第一种结果的原因是Leo的后面有enter输入程序自动终止,next()与nextLine()一前一后执行赋值时，若next()刚好取走一行内容中最后一个有效元素、nextLine将由于当前指针后只剩一个换行符而无法正常赋值。此时nextLine执行后将返回””。因此有必要在next()后紧跟一个nextLine()，确保其后真正的赋值语句不取空值””。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;&lt;p&gt;hasNext（） 是检测 还有没有&lt;strong&gt;下一个&lt;/strong&gt;输入&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>for(;;)和while(true)的区别</title>
+    <link href="http://yoursite.com/2020/07/03/for-%E5%92%8Cwhile-true-%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2020/07/03/for-%E5%92%8Cwhile-true-%E7%9A%84%E5%8C%BA%E5%88%AB/</id>
+    <published>2020-07-03T07:28:00.000Z</published>
+    <updated>2020-07-03T07:29:52.188Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="for-比-while-true-好"><a href="#for-比-while-true-好" class="headerlink" title="for(;;) 比 while(true) 好"></a><u><strong>for(;;) 比 while(true) 好</strong></u></h5><blockquote><p>“死循环”有两种写法：for(;;)和while(true)，两者其实是存在一些区别的，可以从底层的编译上看，使用前者会占用更少的寄存器。</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  编译前              编译后 </span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)；         mov eax,<span class="number">1</span>  </span><br><span class="line">                    test eax,eax </span><br><span class="line">                    je foo+<span class="number">23</span>h</span><br><span class="line">                    jmp foo+<span class="number">18</span>h</span><br></pre></td></tr></table></figure><hr><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    编译前              编译后 </span><br><span class="line"><span class="keyword">for</span> (；；)；          jmp foo+<span class="number">23</span>h</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h5 id=&quot;for-比-while-true-好&quot;&gt;&lt;a href=&quot;#for-比-while-true-好&quot; class=&quot;headerlink&quot; title=&quot;for(;;) 比 while(true) 好&quot;&gt;&lt;/a&gt;&lt;u&gt;&lt;strong&gt;for(;;) 比 while(
+      
+    
+    </summary>
+    
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>May 24th English Notes</title>
@@ -476,50 +524,6 @@
     
     
       <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>April 2nd English Notes</title>
-    <link href="http://yoursite.com/2020/04/02/April-2th-English-Notes/"/>
-    <id>http://yoursite.com/2020/04/02/April-2th-English-Notes/</id>
-    <published>2020-04-02T15:33:00.000Z</published>
-    <updated>2020-04-28T00:08:48.633Z</updated>
-    
-    <content type="html"><![CDATA[<p>4.1</p><p>1，adhere 黏附; 附着 <strong>adhere to sth</strong> (formal) 坚持，遵守，遵循（法律、规章、指示、信念等）</p><pre><code>For ten months he adhered to a strict no-fat low-salt diet.十个月来他严格坚持无脂肪少盐饮食。</code></pre><a id="more"></a><p>2，dosage 剂量  a high dosage of vitamin C</p><p>3，practitioner (尤指医学或法律界的)从业人员;习艺者;专门人才</p><pre><code>dental practitioners 牙医</code></pre><p>4，otherwise 否则，除此以外</p><pre><code>We’re committed to the project. We wouldn&amp;#39;t be here otherwise.否则我们就不会到这里来了</code></pre><p>5，encounter 遭遇，遇到，邂逅 encountered such resistance 遇到过这么大的阻力</p><p>6，be at risk for you may be at risk for heart disease 你可能有心脏病的风险</p><p>7，Samoa 萨摩亚群岛（太平洋）</p><p>8，Epidemiology 流行病学;传染病学</p><p>9，increased by a factor of 50</p><p>10，World  Meteorological organization世界气象组织</p><p>11,remedy 处理方法;    疗法,药品;    纠正</p><p>no simple remedy for unemployment 失业问题没有简单的解决办法</p><p>a herbal remedy 草药 to remedy a problem 解决问题</p><p>12，hazard n危险；v冒失提出，冒险猜测；（to make a suggestion or guess which you know may be wrong）冒…的风险</p><p>a fire/safety hazard  火灾 / 安全隐患</p><p>Would you like to hazard a guess ? 你想猜猜看吗？</p><p>hazard other people&#39;s lives as well as their own 拿他人和自己的生命冒险</p><p>make teaching one&#39;s career 以教书为生</p><p>provide against… 防备放生某事</p><p><strong>&quot;有关增加的英文表述&quot;</strong></p><pre><code>（1）increase， rise，grow up,beef up等词，当表示&quot;激增、猛增、大幅增加&quot;时，还有像       surge，soar，mount，climb，proliferate等表达方式**（2） 例句：Alibaba is also planning to **beef up ** what it calls &quot;ET Medical Brain&quot;加强As such deals  **proliferated** , economists studied their impact.随着这类协定的激增、its quarterly results included a  **surge ** in revenues of 15%它的季报显示收入激增15%Business education is enjoying  **a surge of**  popularity in Ukraine 在乌克兰的受欢迎     程度激增people with sight problems will  **soar**  in the coming decades有视力问题的人数将会激     增As costs  **skyrocket** 随着开销猛增 prices  **skyrocket**  by more than 2,000%</code></pre><p><strong>&quot;举行的英文表达&quot;</strong></p><ol><li><p>（1）hold,give,stage,host</p></li><li><p>（2）be held [taken place] as scheduled 某事被&quot;举行&quot;,用sth is held by sb 或者sth is taken place in someplace</p><pre><code>stage a strike 举行罢工    stage an uprising;举行起义give a banquet  举行宴会</code></pre></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;4.1&lt;/p&gt;
-&lt;p&gt;1，adhere 黏附; 附着 &lt;strong&gt;adhere to sth&lt;/strong&gt; (formal) 坚持，遵守，遵循（法律、规章、指示、信念等）&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;For ten months he adhered to a strict no-fat low-salt diet.十个月来他严格坚持无脂肪少盐饮食。&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello! I am Leo,I love you!!!</title>
-    <link href="http://yoursite.com/2020/03/31/Hello-I-am-Leo-I-love-you/"/>
-    <id>http://yoursite.com/2020/03/31/Hello-I-am-Leo-I-love-you/</id>
-    <published>2020-03-31T13:37:00.000Z</published>
-    <updated>2020-04-28T00:09:08.576Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="NULL" scheme="http://yoursite.com/categories/NULL/"/>
-    
-    
-      <category term="NULL" scheme="http://yoursite.com/tags/NULL/"/>
     
   </entry>
   
