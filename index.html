@@ -162,6 +162,151 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-222"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2020-07-21 09:33:00" datetime="2020-07-21T01:33:00.000Z"  itemprop="datePublished">2020-07-21</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/c/">c</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2020/07/21/222/">printf(&#34;%f&#34;,3)输出为0,printf(&#34;%d&#34;,3.1)输出一个大的数</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        原因在于printf，printf不会关心你输入的参数的类型，你输入的实际是printf(“%f”,3)，但是这个整型3不会被隐式类型转换为浮点型，而是被直接按内存内容当作浮点型
+也就是说，内部使用等价于int i = 3;printf(“%f”, *(float*)&amp;i)
+不幸的是，整型3在内存布局上如果看成浮点数，它就是接近于0
+这是不定参数的特点，没有类型检查，没有类型转换
+在...
+    
+
+        <a href="/2020/07/21/222/" class="post-more waves-effect waves-button">
+            Continue reading...
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-111"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2020-07-21 09:30:00" datetime="2020-07-21T01:30:00.000Z"  itemprop="datePublished">2020-07-21</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/java/">java</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2020/07/21/111/">关于对Exception in thread &#34;main&#34; java.lang.NullPointerException的报错</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        ① Exception in thread “main” java.lang.NullPointerException    at CustomerList.addCustomer(CustomerList.java:21)    at CustomerView.(CustomerView.java:13)    at CustomerView.main(CustomerView.java:...
+    
+
+        <a href="/2020/07/21/111/" class="post-more waves-effect waves-button">
+            Continue reading...
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Untitled"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2020-07-21 09:29:00" datetime="2020-07-21T01:29:00.000Z"  itemprop="datePublished">2020-07-21</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2020/07/21/Untitled/">while(~scanf(&#34;%d %d&#34;,&amp;a,&amp;b))和while(scanf(&#34;%d %d&#34;,&amp;a,&amp;b)!=EOF)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+           多组输入求两个数的和，然后突然发现while(~scanf(“%d %d”,&amp;a,&amp;b))的效果和while(scanf(“%d %d”,&amp;a,&amp;b)!=EOF)没有区别。
+   在这里要说一下scanf()函数：
+   int scanf(char *format[,argument,…]);   scanf(“&lt;格式化字符串&gt;”，&lt;...
+    
+
+        <a href="/2020/07/21/Untitled/" class="post-more waves-effect waves-button">
+            Continue reading...
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-7-10th-7-12th"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -530,139 +675,6 @@ On the fly，匆忙地在百忙中。We have to eat our lunch on ...
         
 	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/English-Notes/" rel="tag">English Notes</a></li></ul>
 
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-May-13th-English-Notes"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2020-05-14 08:06:31" datetime="2020-05-14T00:06:31.000Z"  itemprop="datePublished">2020-05-14</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/05/14/May-13th-English-Notes/">May 13th English Notes</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        1，Sustainable agriculture。可持续发展农业。
-2.Express enthusiasm for。热爱。
-3，Enthusiasm and optimism。热情和积极性。
-4，Of people。Employed。Agriculture Has decreased。
-5，the number of people Employeed in agriculture has...
-    
-
-        <a href="/2020/05/14/May-13th-English-Notes/" class="post-more waves-effect waves-button">
-            Continue reading...
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-May-12th-English-Notes"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2020-05-12 16:46:34" datetime="2020-05-12T08:46:34.000Z"  itemprop="datePublished">2020-05-12</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/05/12/May-12th-English-Notes/">May 12th English Notes</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        1，warrant授权令使有必要；使正当；使恰当 ,确保担保
-stand behind and guarantee the quality, accuracy, or condition of 
-
-All entrants must warrant that their entry is entirely their own work 
-所有参赛者必须保证其参赛作品完全是自己创作的。  
-
-...
-    
-
-        <a href="/2020/05/12/May-12th-English-Notes/" class="post-more waves-effect waves-button">
-            Continue reading...
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-May-10th-English-Notes"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2020-05-12 16:31:52" datetime="2020-05-12T08:31:52.000Z"  itemprop="datePublished">2020-05-12</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/05/12/May-10th-English-Notes/">May 10th English Notes</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        1，pursue demanding schedule 执行繁忙的日程
-2，NATO 北约
-3，contest the seat 角逐席位
-4，scheme 计划；体系; 体制; 阴谋; v，密谋
-​      schema (计划或理论的) 提要，纲要
-5，The inevitable course of history 历史必由之路。
-6，Select discreetly 谨慎地挑选。...
-    
-
-        <a href="/2020/05/12/May-10th-English-Notes/" class="post-more waves-effect waves-button">
-            Continue reading...
-        </a>
     </div>
     
 </article>

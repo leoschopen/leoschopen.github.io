@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-07-12T08:38:33.218Z</updated>
+  <updated>2020-07-21T01:34:33.246Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,84 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>printf(&quot;%f&quot;,3)输出为0,printf(&quot;%d&quot;,3.1)输出一个大的数</title>
+    <link href="http://yoursite.com/2020/07/21/222/"/>
+    <id>http://yoursite.com/2020/07/21/222/</id>
+    <published>2020-07-21T01:33:00.000Z</published>
+    <updated>2020-07-21T01:34:33.246Z</updated>
+    
+    <content type="html"><![CDATA[<p>原因在于printf，printf不会关心你输入的参数的类型，你输入的实际是<br>printf(“%f”,3)，但是这个整型3不会被隐式类型转换为浮点型，而是被直接按内存内容当作浮点型</p><p>也就是说，内部使用等价于<br>int i = 3;<br>printf(“%f”, *(float*)&amp;i)</p><p>不幸的是，整型3在内存布局上如果看成浮点数，它就是接近于0</p><p>这是不定参数的特点，没有类型检查，没有类型转换</p><h4 id="在C语言标准中，浮点数是采用IEEE754标准-float类型数据存储格式如下："><a href="#在C语言标准中，浮点数是采用IEEE754标准-float类型数据存储格式如下：" class="headerlink" title="在C语言标准中，浮点数是采用IEEE754标准 float类型数据存储格式如下："></a>在C语言标准中，浮点数是采用IEEE754标准 float类型数据存储格式如下：</h4><p>​        最高位最低位符号S 阶码E 尾数M 最高位 31 位 ,保存符号位 S“, 0”表示正数 ,“1”表示负数 30 位～23 位 ,共 8 位 ,移码方式(指数值加上偏移量127)保存指数部分 ,称为阶码 22 位～0 位 ,共 23 位 ,保存系数部分 ,称为尾数 ,对于规范化二进制数 ,整数位的前导“1”不保存 。</p><p>​        隐含 直接保存小数部分 对于 double 型 ,IEEE 754 - 1985标准规定用64 位表示 ,具体如下: ·最高位63 位 ,保存 S“, 0”正数“, 1”负数; ·62 位～52 位 ,共 11 位 ,移码方式(指数值加1023)保存指数 ,称为阶码;</p><p>​        ·51 位～0 位 ,共 52 位 ,保存系数部分 ,称为尾数 ,对于规范化二进制数 ,整数位的“1”不保存隐含) ,直接保存小数部分 将5.01压入栈，为double的数，栈8个字节。</p><p>​        而执行printf(“%d/n”, 5.01);则只需要取前四个字节就可以了。</p><p>取出来为. printf(“%f/n”, 5); 将5压入栈为 0000 0000 0000 0000 0000 0000 0000 0101，执行printf(“%f/n”, 5)；需要从栈中取8个字节， 取0000 0000 0000 0000 0000 0000 0000 0101之后，还要取他之后的四个字节， 但不管如何，前四个字节为0000 0000 0000 0000 0000 0000 0000 0101的浮点数为0.000000，所以输出0.000000</p><p>注意：内存内容是没有改变的，决定内存中内容的语义是读取的格式，float和double的存储格式和int类型的格式区别非常大。（但是都是低字节放在前面，高字节放在后面）</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;原因在于printf，printf不会关心你输入的参数的类型，你输入的实际是&lt;br&gt;printf(“%f”,3)，但是这个整型3不会被隐式类型转换为浮点型，而是被直接按内存内容当作浮点型&lt;/p&gt;
+&lt;p&gt;也就是说，内部使用等价于&lt;br&gt;int i = 3;&lt;br&gt;printf
+      
+    
+    </summary>
+    
+    
+      <category term="c" scheme="http://yoursite.com/categories/c/"/>
+    
+    
+      <category term="c" scheme="http://yoursite.com/tags/c/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于对Exception in thread &quot;main&quot; java.lang.NullPointerException的报错</title>
+    <link href="http://yoursite.com/2020/07/21/111/"/>
+    <id>http://yoursite.com/2020/07/21/111/</id>
+    <published>2020-07-21T01:30:00.000Z</published>
+    <updated>2020-07-21T01:31:53.183Z</updated>
+    
+    <content type="html"><![CDATA[<p>① Exception in thread “main” java.lang.NullPointerException<br>    at CustomerList.addCustomer(CustomerList.java:21)<br>    at CustomerView.<init>(CustomerView.java:13)<br>    at CustomerView.main(CustomerView.java:161)</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class CustomerList &#123;</span><br><span class="line">    private static  Customer[] customers;&#x2F;&#x2F;用来保存客户对象的数组</span><br><span class="line">    private  static int total &#x3D; 0;&#x2F;&#x2F;记录已保存客户对象的数量</span><br><span class="line"></span><br><span class="line">    public CustomerList(int totalCustomer)&#123;</span><br><span class="line">        customers &#x3D; new Customer[totalCustomer];</span><br><span class="line">        &#x2F;&#x2F;原因在这里，原来是Customer[] customers &#x3D; new Customer[totalCustomer];报错</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean addCustomer(Customer customer)&#123;</span><br><span class="line">        if(total&gt;&#x3D;customers.length)&#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">            customers[total++] &#x3D; customer;</span><br><span class="line">            return true;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class CustomerView &#123;</span><br><span class="line"></span><br><span class="line">    private CustomerList customers &#x3D; new CustomerList(10);</span><br><span class="line">    &#x2F;&#x2F;Customer[] customers &#x3D; new Customer[10]</span><br><span class="line">    public CustomerView() &#123;</span><br><span class="line">        Customer cust &#x3D; new Customer(&#39;男&#39;, &quot;张三&quot;, 30, &quot;010-56253825&quot;,</span><br><span class="line">                &quot;abc@email.com&quot;);</span><br><span class="line">        customers.addCustomer(cust);</span><br><span class="line">     &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><p>错误的地方重新再方法内声明了customers，造成原本的私有成员customers数组没有被初始化，只分配了空间，因此该数组中的类对象都被初始化为null了，就出现了空指针。</p><p>② 还有一种情况是在JAVA SWING中，因为当我们想往toolbar（JPanel）里面添加组件,这里是4个button时,虽然我们已经在前面声明了toolbar,但是我们并没有将toolbar new出来,也就是没给他创建堆内存,这时遍会报空指针异常;只要将this.toolBar = new JToolBar();加在用它的前面即可(即toolbar.add的前面);</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>类的实例数组，需要初始化。</p><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>java异常分运行时异常和编译时异常</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * 一、异常体系结构</span><br><span class="line"> * </span><br><span class="line"> * java.lang.Throwable</span><br><span class="line"> * |-----java.lang.Error:一般不编写针对性的代码进行处理。</span><br><span class="line"> * |-----java.lang.Exception:可以进行异常的处理</span><br><span class="line"> * |------编译时异常(checked)</span><br><span class="line"> * |-----IOException</span><br><span class="line"> * |-----FileNotFoundException</span><br><span class="line"> * |-----ClassNotFoundException</span><br><span class="line"> * |------运行时异常(unchecked,RuntimeException)</span><br><span class="line"> * |-----NullPointerException</span><br><span class="line"> * |-----ArrayIndexOutOfBoundsException</span><br><span class="line"> * |-----ClassCastException</span><br><span class="line"> * |-----NumberFormatException</span><br><span class="line"> * |-----InputMismatchException</span><br><span class="line"> * |-----ArithmeticException</span><br><span class="line"> * </span><br><span class="line"> * </span><br><span class="line"> * </span><br><span class="line"> * 面试题：常见的异常都有哪些？举例说明</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ExceptionTest &#123;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;******************以下是编译时异常***************************</span><br><span class="line">@Test</span><br><span class="line">public void test7()&#123;</span><br><span class="line">&#x2F;&#x2F;File file &#x3D; new File(&quot;hello.txt&quot;);</span><br><span class="line">&#x2F;&#x2F;FileInputStream fis &#x3D; new FileInputStream(file);</span><br><span class="line">&#x2F;&#x2F;</span><br><span class="line">&#x2F;&#x2F;int data &#x3D; fis.read();</span><br><span class="line">&#x2F;&#x2F;while(data !&#x3D; -1)&#123;</span><br><span class="line">&#x2F;&#x2F;System.out.print((char)data);</span><br><span class="line">&#x2F;&#x2F;data &#x3D; fis.read();</span><br><span class="line">&#x2F;&#x2F;&#125;</span><br><span class="line">&#x2F;&#x2F;</span><br><span class="line">&#x2F;&#x2F;fis.close();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;******************以下是运行时异常***************************</span><br><span class="line">&#x2F;&#x2F;ArithmeticException</span><br><span class="line">@Test</span><br><span class="line">public void test6()&#123;</span><br><span class="line">int a &#x3D; 10;</span><br><span class="line">int b &#x3D; 0;</span><br><span class="line">System.out.println(a &#x2F; b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;InputMismatchException</span><br><span class="line">@Test</span><br><span class="line">public void test5()&#123;</span><br><span class="line">Scanner scanner &#x3D; new Scanner(System.in);</span><br><span class="line">int score &#x3D; scanner.nextInt();</span><br><span class="line">System.out.println(score);</span><br><span class="line"></span><br><span class="line">scanner.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;NumberFormatException</span><br><span class="line">@Test</span><br><span class="line">public void test4()&#123;</span><br><span class="line"></span><br><span class="line">String str &#x3D; &quot;123&quot;;</span><br><span class="line">str &#x3D; &quot;abc&quot;;</span><br><span class="line">int num &#x3D; Integer.parseInt(str);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;ClassCastException</span><br><span class="line">@Test</span><br><span class="line">public void test3()&#123;</span><br><span class="line">Object obj &#x3D; new Date();</span><br><span class="line">String str &#x3D; (String)obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;IndexOutOfBoundsException</span><br><span class="line">@Test</span><br><span class="line">public void test2()&#123;</span><br><span class="line">&#x2F;&#x2F;ArrayIndexOutOfBoundsException</span><br><span class="line">&#x2F;&#x2F;int[] arr &#x3D; new int[10];</span><br><span class="line">&#x2F;&#x2F;System.out.println(arr[10]);</span><br><span class="line">&#x2F;&#x2F;StringIndexOutOfBoundsException</span><br><span class="line">String str &#x3D; &quot;abc&quot;;</span><br><span class="line">System.out.println(str.charAt(3));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;NullPointerException</span><br><span class="line">@Test</span><br><span class="line">public void test1()&#123;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;int[] arr &#x3D; null;</span><br><span class="line">&#x2F;&#x2F;System.out.println(arr[3]);</span><br><span class="line"></span><br><span class="line">String str &#x3D; &quot;abc&quot;;</span><br><span class="line">str &#x3D; null;</span><br><span class="line">System.out.println(str.charAt(0));</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>异常解决方案：</p><ol><li><p>try-catch-finally结构,一般对编译时异常进行处理，将其延后到运行时。</p></li><li><p>throws + 异常类型</p><p>第一种方式真正解决了异常而第二种在调用者使用时，仍然会将异常抛给调用者。</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;① Exception in thread “main” java.lang.NullPointerException&lt;br&gt;    at CustomerList.addCustomer(CustomerList.java:21)&lt;br&gt;    at CustomerVi
+      
+    
+    </summary>
+    
+    
+      <category term="java" scheme="http://yoursite.com/categories/java/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>while(~scanf(&quot;%d %d&quot;,&amp;a,&amp;b))和while(scanf(&quot;%d %d&quot;,&amp;a,&amp;b)!=EOF)</title>
+    <link href="http://yoursite.com/2020/07/21/Untitled/"/>
+    <id>http://yoursite.com/2020/07/21/Untitled/</id>
+    <published>2020-07-21T01:29:00.000Z</published>
+    <updated>2020-07-21T01:30:42.981Z</updated>
+    
+    <content type="html"><![CDATA[<p>   多组输入求两个数的和，然后突然发现while(~scanf(“%d %d”,&amp;a,&amp;b))的效果和while(scanf(“%d %d”,&amp;a,&amp;b)!=EOF)没有区别。</p><p>   在这里要说一下scanf()函数：</p><p>   int scanf(char *format[,argument,…]);<br>   scanf(“&lt;格式化字符串&gt;”，&lt;地址表&gt;);返回类型为int， scanf()函数返回成功赋值的数据项数，出错时则返回EOF。<br>   例如scanf(“%d %d”,&amp;a,&amp;b),如果a、b均赋值成功返回值为2，只是a赋值成功返回1，a、b都不成功返回0，出错的时候返回EOF。(EOF不是一个字符，它被定义为是int类型的一个负数-1。)</p><p>  在这里我有个疑惑的地方是：scanf(“%d %d”,&amp;a,&amp;b),如果a、b均赋值成功返回值为2，为什么取反之后结果为-3。</p><p>  原来我忘记了：计算机中的数都是以补码形式存在的。我们都知道c语言中int占4个字节，也就是32位存储一个整数。</p><p>  正数的原码=补码=反码。</p><p>  2的补码：0000 0000 0000 0000 0000 0000 0000 0010</p><p>  取反之后得到另一个数的补码：1111 1111 1111 1111 1111 1111 1111 1101</p><p>  取反：1000 0000 0000 0000 0000 0000 0000 0010</p><p>  +1：  1000 0000 0000 0000 0000 0000 0000 0011</p><p>  得到也就是十进制的-3。</p><p>  然而这两种方法在输入字母的时候会变成死循环。</p><p>  改成scanf(“%d %d”,&amp;a,&amp;b)==2就会跳出循环。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;   多组输入求两个数的和，然后突然发现while(~scanf(“%d %d”,&amp;amp;a,&amp;amp;b))的效果和while(scanf(“%d %d”,&amp;amp;a,&amp;amp;b)!=EOF)没有区别。&lt;/p&gt;
+&lt;p&gt;   在这里要说一下scanf()函数：&lt;/p&gt;
+      
+    
+    </summary>
+    
+    
+    
+      <category term="c" scheme="http://yoursite.com/tags/c/"/>
+    
+  </entry>
   
   <entry>
     <title>7.10th,7.12th</title>
@@ -488,85 +566,6 @@
     
     
       <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>April 11th English Notes</title>
-    <link href="http://yoursite.com/2020/04/11/April-11th-English-Notes/"/>
-    <id>http://yoursite.com/2020/04/11/April-11th-English-Notes/</id>
-    <published>2020-04-11T04:57:00.000Z</published>
-    <updated>2020-04-14T11:43:18.123Z</updated>
-    
-    <content type="html"><![CDATA[<h2>vocabulary</h2>1,hypotheses n假说，假设;(凭空的)猜想  <p><code>an idea which is suggested as a possible explanation for a particular situation or condition, but which has not yet been proved to be correct.</code><br>2,ideal n理想，完美的人或事<br>3,tempering n回火（炼钢）<br><code>tempering of the reality 现实的磨炼</code><br>4，argue  论证；说理<br><code>to give reasons why you think that sth is right/wrong, true/not true, etc., especially to persuade people that you are right</code><br>5,context 背景，上下文，语境<br>6，intervention 干涉;干预<br>7，recession 经济衰退;退后;撤回  </p><blockquote><p>the impact of the current recession on manufacturing<br>时下经济萎缩对制造业的影响  </p></blockquote><p>8,undertake 承担;从事;承诺<br><code>to make yourself responsible for sth and start doing it</code><br><code>to agree or promise that you will do sth</code></p><blockquote><p>to undertake a task/project<br>He undertook to finish the job by Friday.<br>他答应星期五或之前完成这一工作。  </p></blockquote><p>9,slightly  <code>a little</code></p><blockquote><p>I knew her slightly.  </p></blockquote><p>slender 苗条的;细的;窄的;微薄的;不足的</p><blockquote><p>her slender figure 她苗条的身材    </p></blockquote><p>10,flourish v繁荣,昌盛,茁壮成长;健康幸福;(为引起注意)挥舞<code>to develop quickly and be successful or common</code><br>n.令人难忘的方式;华丽辞藻<code>an impressive act or way of doing sth</code> </p><blockquote><p>if our economy is to flourish 如果我们的经济要繁荣</p></blockquote><p>11,succeed 接替；继任；随后出现  </p><blockquote><p>Who succeeded Kennedy as President?接替肯尼迪任总统的是谁？  </p></blockquote><p>12,elimate 消除</p><blockquote><p>if the poverty is to be elimated 如果要消除贫困</p></blockquote><p>13，well-being 健康幸福快乐  </p><blockquote><p>Singing can create a sense of wellbeing…唱歌能够给人一种心旷神怡的感觉。  </p></blockquote><p>14,Millennium  [mɪˈleniəm] 一千年;千周年纪念日;千禧年<br>15,declaration 公告宣告 ~of a war; the Declaration of Independence<br>16,agency <code>a government department that provides a particular service</code><br>17,gathering   n.聚集;聚会;集会;收集v.聚集;集合;召集;收拢(分散的东西);搜集</p><blockquote><p>the twenty-second annual gathering of the South Pacific Forum.第22届南太平洋论坛年会  </p></blockquote><p>18,indicator 指示信号;迹象;指示器;指针;方向灯<br><code>a sign that shows you what sth is like or how a situation is changing</code>  </p><blockquote><p>The economic indicators are better than expected.经济指标比预期的好。  </p></blockquote><p>19,tease v.取笑;戏弄;挑逗，撩拨(异性)n.爱戏弄人的人;逗弄者;取笑者;戏弄;捉弄;勾引人者</p><blockquote><p><strong>tease out 套出，巧妙获得（信息或答案）</strong><br>he was sure he could tease it out if only he had time. 他肯定，只要他有时间就一定能弄个清楚。<br>tease out the answers 套出答案  </p></blockquote><p>20,degradation 堕落;潦倒(的境况);<code>a situation in which sb has lost all self-respect and the respect of other people</code>  毁坏，恶化(过程)<code>the process of something becoming worse or weaker, or being made worse or weaker.</code>  </p><blockquote><p>the degradation of being sent to prison 被关进监狱的落泊境况<br>environmental degradation 环境恶化  </p></blockquote><p>21,derive v.获得;(使)起源;(使)产生<br>derive pleasure from helping others 助人为乐<br>be derived from sth 起源于；来自 </p><blockquote><p>‘politics’ is derived from a Greek word    ‘politics’一词源自希腊语</p></blockquote><p>22,propotion 部分;比例;倍数关系;均衡  </p><blockquote><p>a large proportion of   一大部分<br>The proportion of men to women 男女比例</p></blockquote><p>23,  grind 磨碎;磨快;磨光n.令人疲劳(或厌倦)的工作;苦差事;刺耳的摩擦声</p><blockquote><p>to grind coffee/corn将咖啡 / 谷粒磨成粉</p></blockquote><p>24,case n具体情况;事例;事实;特殊情况;案件；容器;论据<br><code>a particular situation or a situation of a particular type</code></p><blockquote><p>In some cases  在某些情况下<br><code>the true situation</code><br>If that is the case (= if the situation described is true)  如果真是那样<br><code>a situation that relates to a particular person or thing</code><br>In your case, we are prepared to be lenient.根据你的情况，我们可以从宽处理。<br>a murder case 案件<br>the case for the defence/prosecution 有利于被告 / 原告的论据  </p></blockquote><p>25,graphic 图案的;形象的，生动的，逼真的(尤指令人不快的事物)  图表<br><code>very clear and full of details, especially about sth unpleasant</code> </p><blockquote><p>a graphic account/description of a battle  对战斗的生动叙述 / 描述<br>He kept telling us about his operation, in the most graphic detail .<br>他不停地向我们绘声绘色地讲述他动手术的详细情况。  </p></blockquote><p>26,discernible 看得清的;辨别得出的<code>you can see it or recognize that it exists</code></p><blockquote><p>Far away the outline of the island is just discernible…远处，岛屿轮廓仅依稀可辨。  </p></blockquote><p>27,across<br><strong>across our diverse planet 在我们这个多元化的星球上</strong><br><strong>across a dozens of environment issue  在许多环境问题上</strong><br>28,improvement 改善，改进</p><h2>phrases</h2>  >1,Residence among the poor **is suggested as** a way of understanding their problems.   >有人提出与穷人同住是了解他们问题的一种办法。  <p> 2,sow the seeds  </p><blockquote><p>I sow the seed in pots of soil-based compost. 我把种子种在几盆掺有堆肥的土里。  </p></blockquote><p> 3,grind to a halt 逐渐停止;慢慢瘫痪;（车辆）声音刺耳地缓缓停下</p><blockquote><p>In winter they almost grind to a halt. 到了冬天，它们会停止活动。 <br/><br>He cites capacitors and connectors, without which much of the modern world would grind to a halt. 他举了电容器和连接器的例子，没有这两样产品，现代世界将大面积陷入停顿。  </p></blockquote><p>4,better off 境况（尤指经济性）较好的  </p><blockquote><p>He’s much better off than before. 他手头比过去宽多了。</p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2&gt;vocabulary&lt;/h2&gt;
-1,hypotheses n假说，假设;(凭空的)猜想  
-
-&lt;p&gt;&lt;code&gt;an idea which is suggested as a possible explanation for a particular situation 
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>April 8th English Notes</title>
-    <link href="http://yoursite.com/2020/04/05/April-5th-English-Notes/"/>
-    <id>http://yoursite.com/2020/04/05/April-5th-English-Notes/</id>
-    <published>2020-04-05T02:31:00.000Z</published>
-    <updated>2020-04-08T02:51:03.929Z</updated>
-    
-    <content type="html"><![CDATA[<p>1, concerns<br>2, a memorial service<br>3, tap water 自来水<br>4, fuel the “walking on eggshells”feeling 加剧了“如履薄冰”的感觉<br>5, aside 在旁边 <code>She pulled the curtain aside.</code></p><blockquote><p>sweep aside <code>sweep human rights aside  对人权置之不顾</code> </p></blockquote><p>6, articles of the contract 合同条款<br><code>contract a project 承包工程</code><br><code>contract for 承办</code>  </p><p>7, arrange for  安排<br>8, training are increasingly important as the body ages<br>9, general practice 全科诊所<br>10, improve fuel efficiency and <strong><em>perfect(使完美)</em></strong>  hybrid(混合动力) vehicles<br>11,  commodity 商品;有用的东西<br>12, work out a solution 制定<br>13, offer onself to the state 为国献身<br>14, add fuel to 加油 v fuel<br>15, the Stock Exchange 证券交易所<br>16, exchange greetings 寒暄<br>17, a side dish 配菜<br>18, meet the criteria 符合标准<br>19, ongoing 进行中的<br>    <code>an ongoing debate  The police investigation is ongoing.</code><br> 20, <a href=""https://fanyi.baidu.com/aldtype=85#en/zh/conclusive"" title="adj.结论性的;不容置疑的;确凿的">conlusive</a> evidence 确凿证据<br>21, scrutinize 仔细查看;认真检查;<br><code>The statement was carefully scrutinized before publication.声明在发表前经过仔细审查。</code><br>22, observational  观察的，观测的<br>23, randomize 使随机化；（使）作任意排列<br>24, dietary  饮食的;有关饮食的;<br><code>the dietary habits 饮食习惯</code><br>25, apparently 据…所知;看来;显然  </p><blockquote><p>according to what you have heard or read; according to the way sth appears<br>You use apparently to indicate that the information you are giving is something that you have heard, but you are not certain that it is true.</p><blockquote><p>Apparently they are getting divorced soon.看样子，他们很快就要离婚。<br>Apparently the girls are not at all amused by the whole business…据说女孩们觉得整件事情一点也不好笑。</p></blockquote></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;1, concerns&lt;br&gt;2, a memorial service&lt;br&gt;3, tap water 自来水&lt;br&gt;4, fuel the “walking on eggshells”feeling 加剧了“如履薄冰”的感觉&lt;br&gt;5, aside 在旁边 &lt;code&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据库原理中函数依赖，函数依赖集，属性集闭包</title>
-    <link href="http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/"/>
-    <id>http://yoursite.com/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E7%90%86%E4%B8%AD%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%EF%BC%8C%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E9%9B%86%EF%BC%8C%E5%B1%9E%E6%80%A7%E9%9B%86%E9%97%AD%E5%8C%85/</id>
-    <published>2020-04-04T12:51:00.000Z</published>
-    <updated>2020-04-05T10:52:10.390Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>理论准备：</strong><br><strong><em>Armstrong公理</em></strong><br>F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;<br>F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；<br>F3(传递性): 若X→Y,Y→Z为F所蕴涵，则X→Z为F所蕴涵；<br>F4(伪增性)：若X→Y，W≥Z(<strong>表W包含Z</strong>）为F所蕴涵，则XW→YZ为F所蕴涵；<br>—————（XZ→YZ,Z换成更大的W）<br>F5(伪传性): 若X→Y，YW→Z为F所蕴涵, 则XW→Z为F所蕴涵；（增广加传递）<br>F6(合成性): 若X→Y,X→Z为F所蕴涵，则X→YZ为F所蕴涵；<br>F7(分解性): 若X→Y,Z≤Y (<strong>表Z包含于Y</strong>）为F所蕴涵，则X→Z为F所蕴涵。</p><p>F:函数依赖集<br>U:属性集U={A1,A2,…,An}<br>R(U):属性集上面的一个关系模式</p><hr><p><strong>蕴涵&amp;逻辑蕴涵：</strong></p><hr><p><strong><em>蕴涵：A蕴含B,记为”A→B”</em></strong><br><strong><em>逻辑蕴涵：</em></strong>1，例：关系模式 R=(A,B,C),函数依赖集F={A→B,B→C}, F逻辑蕴涵A→C</p><hr><p><strong>闭包&amp;属性（集）闭包</strong></p><hr><p>1，闭包：若F为关系模式R(U)的函数依赖集，我们把F以及所有被F逻辑蕴涵的函数依赖的集合称为F的闭包，记为F+<br>即：F+={X→Y|X→Y∈F∨“应用Armstong公理从F中导出的任何X→Y”}</p><p>2，F+，里面的元素是函数依赖（就是X→Y这种东西）<br>XF+，里面的元素是属性，这些属性是F根据Armstrong 公理推导出来的<br><code>(定义: 设关系模式R(U，F )，U 为其属性集，F 为其函数依赖集，则称在所有用Armstrong 公理从F 推出的函数依赖X → Ai 中，Ai 的属性集合为X 的属性闭包。)</code></p><p><strong><em>一个重要的定理：X→Y属于F+，等价于Y属于XF+。X,Y都是U中的属性。</em></strong>（引理4）</p><hr><p><strong>覆盖</strong></p><hr><p>F+=G+ 等价于F包含于G+且G包含于F+，称F和G是等价的，也称F覆盖G或者G覆盖F。<br>证明：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/1.jpg" alt="引理5的证明" title="引理5的证明">                </div>                <div class="image-caption">引理5的证明</div>            </figure><p>为验证F、G是否等价，需要对任一X→Y属于F+检验是否X→Y属于G+, 由引理4可将这种检验转为是否<br>Y是否属于X关于F的闭包由此可将求F+这种不容易完成的事转为容易完成的事，即求属性闭包。</p><p><strong>属性闭包的计算算法</strong><br>求属性闭包的目的是为了判断一个函数依赖是否被一个F所蕴涵</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/2.jpg" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/3.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><hr><p><strong>最小覆盖</strong></p><p>就是F中去掉某个函数依赖后如果还是和原来的等价，就可以把这个函数依赖删除，执行完后，剩下的函数依赖集合是最小覆盖</p><hr>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;strong&gt;理论准备：&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;&lt;em&gt;Armstrong公理&lt;/em&gt;&lt;/strong&gt;&lt;br&gt;F1(自反性)：若x包含y，xy都被F包含，则F逻辑蕴涵X→Y;&lt;br&gt;F2(增广性): 若X→Y为F所蕴涵，则XZ→YZ为F所蕴涵；&lt;br
-      
-    
-    </summary>
-    
-    
-    
-      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
