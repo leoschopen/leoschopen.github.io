@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>hasNext(),next(),nextLine(),hasNextLine() | Leo&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java Notes">
+    <meta name="description" content="hasNext（） 是检测 还有没有下一个输入 12345678910&#x2F;** * Returns true if this scanner has another token in its input. * This method may block while waiting for input to scan. * The scanner does not advance past any">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hasNext(),next(),nextLine(),hasNextLine()">
+<meta property="og:url" content="http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="hasNext（） 是检测 还有没有下一个输入 12345678910&#x2F;** * Returns true if this scanner has another token in its input. * This method may block while waiting for input to scan. * The scanner does not advance past any">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-03T08:20:00.000Z">
+<meta property="article:modified_time" content="2020-07-12T08:39:34.322Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="Java Notes">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="Leo&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/null">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Leo Schopen</h5>
+          <a href="mailto:leoschopen@gmail.com" title="leoschopen@gmail.com" class="mail">leoschopen@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/leoschopen" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://weibo.com/6611153997/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">hasNext(),next(),nextLine(),hasNextLine()</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">hasNext(),next(),nextLine(),hasNextLine()</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-07-03T08:20:00.000Z" itemprop="datePublished" class="page-time">
+  2020-07-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#在使用的时候有需要注意的地方："><span class="post-toc-number">1.</span> <span class="post-toc-text">在使用的时候有需要注意的地方：</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-hasNext-next-nextLine-hasNextLine"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">hasNext(),next(),nextLine(),hasNextLine()</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-07-03 16:20:00" datetime="2020-07-03T08:20:00.000Z"  itemprop="datePublished">2020-07-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ul>
+<li><p>hasNext（） 是检测 还有没有<strong>下一个</strong>输入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns true if this scanner has another token in its input.</span></span><br><span class="line"><span class="comment"> * This method may block while waiting for input to scan.</span></span><br><span class="line"><span class="comment"> * The scanner does not advance past any input.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true if and only if this scanner has another token</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalStateException if this scanner is closed</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> java.util.Iterator</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">当执行到hasNext（）时，它会先扫描缓冲区中是否有字符，有则返回<span class="keyword">true</span>,继续扫描。直到扫描为空，这时并不返回<span class="keyword">false</span>,而是将方法阻塞，等待你输入内容然后继续扫描。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while(!sc.hasNext(&quot;a&quot;))  &#x2F;&#x2F;即以a为结束符号</span><br><span class="line">&#123;</span><br><span class="line">    System.out.println(&quot;键盘输入的内容是：&quot;+ sc.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>next（）是指针移动到当前下标，并<strong>取出下一个</strong>输入</p>
+<pre><code>Scanner sc = new Scanner(System.in);
+while(sc.hasNext())
+{
+    System.out.println(&quot;键盘输入的内容是：&quot; + sc.next());
+}//依次取出输入内容（空格做分割）</code></pre></li>
+<li><p>nextLine（） 把指针移动到<strong>下一行</strong> 让然后<strong>取出当前这一行</strong>的输入(输出带空格)</p>
+</li>
+<li><p>hasNextLine（） 是检测<strong>下一行</strong>有没有输入</p>
+<hr>
+</li>
+</ul>
+<h3 id="在使用的时候有需要注意的地方："><a href="#在使用的时候有需要注意的地方：" class="headerlink" title="在使用的时候有需要注意的地方："></a><strong>在使用的时候有需要注意的地方：</strong></h3><ul>
+<li><p>　<strong>next()不会吸取字符前/后的空格/Tab键，只吸取字符，开始吸取字符（字符前后不算）直到遇到空格/Tab键/回车截止吸取；</strong></p>
+</li>
+<li><p>　<strong>nextLine()吸取字符前后的空格/Tab键，回车键截止。</strong></p>
+</li>
+</ul>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">	Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"请输入字符串（next）："</span>);</span><br><span class="line">        String str = input.next();</span><br><span class="line">        System.out.println(str);</span><br><span class="line"> </span><br><span class="line">        System.out.println(<span class="string">"请输入字符串（nextLine）："</span>);</span><br><span class="line">        String str1 = input.nextLine();</span><br><span class="line">        System.out.println(str1);</span><br><span class="line">&#125; </span><br><span class="line">输入输出结果:</span><br><span class="line">请输入字符串（next）：</span><br><span class="line">Leo Schopen<span class="comment">//在enter之后即停止</span></span><br><span class="line">Leo</span><br><span class="line">请输入字符串（nextLine）：</span><br><span class="line"> Schopen</span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">请输入字符串（next）：</span><br><span class="line">leo</span><br><span class="line">leo</span><br><span class="line">请输入字符串（nextLine）：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>出现第一种结果的原因是Leo的后面有空格输入程序自动终止，scanner.next()方法将指针从当前位置指向下一个被<strong>断字符</strong>断开的有效<strong>元素</strong>的末尾，或下一个分隔符号区的起点位置，这样再nextLine的时候就输出空格+Schopen</li>
+<li>出现第一种结果的原因是Leo的后面有enter输入程序自动终止,next()与nextLine()一前一后执行赋值时，若next()刚好取走一行内容中最后一个有效元素、nextLine将由于当前指针后只剩一个换行符而无法正常赋值。此时nextLine执行后将返回””。因此有必要在next()后紧跟一个nextLine()，确保其后真正的赋值语句不取空值””。</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-07-12T08:39:34.322Z" itemprop="dateUpdated">2020-07-12 16:39:34</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="Leo Schopen">
+            Leo Schopen
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Notes/" rel="tag">Java Notes</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&title=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&title=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/07/09/July-9th-English-Notes/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">July 9th English Notes</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/07/03/for-%E5%92%8Cwhile-true-%E7%9A%84%E5%8C%BA%E5%88%AB/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">for(;;)和while(true)的区别</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Leo Schopen &copy; 2020</span>
+            <span>
+                
+                Power by <a href="" target="_blank">Leo</a> 
+            </span>
+        </p>
+    </div>
+</footer>
+<!--添加网站的运行时间-->
+<section class="footer-time">
+    <span class="footer__copyright">
+    <div>
+    <span id="span_dt_dt"> </span>
+    <script language="javascript">
+      function show_date_time(){
+        window.setTimeout("show_date_time()", 1000);
+        BirthDay=new Date("3/31/2020 20:00:00");//这个日期是可以修改的
+        today=new Date();
+        timeold=(today.getTime()-BirthDay.getTime());//其实仅仅改了这里
+        sectimeold=timeold/1000
+        secondsold=Math.floor(sectimeold);
+        msPerDay=24*60*60*1000
+        e_daysold=timeold/msPerDay
+        daysold=Math.floor(e_daysold);
+        e_hrsold=(e_daysold-daysold)*24;
+        hrsold=Math.floor(e_hrsold);
+        e_minsold=(e_hrsold-hrsold)*60;
+        minsold=Math.floor((e_hrsold-hrsold)*60);
+        seconds=Math.floor((e_minsold-minsold)*60);
+        span_dt_dt.innerHTML="Leo's博客已经运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+      }
+      show_date_time();
+    </script>
+    </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+</section>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&title=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&title=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《hasNext(),next(),nextLine(),hasNextLine()》 — Leo's Blog&url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/03/hasNext-next-nextLine-hasNextLine/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3aQU7kQAwF0L7/pZntSAzhf7sKeqSXVUSrg1+Qysb26xVfH39dn3/+1f3nbyX3yfMPX3h4eHiL0J/DygN9DiV5fkJ9jhkPDw/vNq89lJOA9qG3SQIPDw/vnXntK2g/TRIJHh4e3v/Cey6Inw/05OfPRTMeHh7e+/DyxyXl9f4+KakP91rw8PDwYl4+RXqf+yvzPTw8PLz1VL1tFuQtiXbYNowWDw8P7wIvP3BnZfeqiXBq2IaHh4d3lJcvV+3L3CQN5K8salvg4eHhXeDNVqPaNmsdyqjJ+6oTIh4eHt6Et2k0JLycnS9XFctbeHh4eJd5+4cmaaNdpWrTSVHF4+Hh4a157XpTgt+sKRxYvcLDw8O7xmvDmrUG8kWBfcNi9dbx8PDw4llVMpqq2wHrZvGxV4yHh4d3jZcfxHk6OdW6nTWU8fDw8G7wTq1DzUKfNY6L1IWHh4d3lJcXppt2QN6AaJu/35TyeHh4eBd4yRfywz0ZULWz/tkYDA8PD+93efs2RB7QbOGgSDB4eHh4a15ypCaF8qxcTn5vkhK+jAcPDw/vGi8pTD/Kqx1czUr2b14HHh4e3gXevh3Qjqk2qaVtZODh4eHd4OXFdLvDNWvgnh284eHh4d3gJV3e/YA/H63NFg6G/zfg4eHhHeLNxk6zEVc7/h+W3Xh4eHg/wssP31nrti3B80/x8PDwfpKXlMv5stQzOx+etSnqH9/Cw8PDO8rbLwS04652oLX5M+Dh4eHd4M2asLMB/2zVYLaYVV94eHh4Ja8tcPMh1uzgnrV6v4wEDw8P7xqv7mGMUkhegp9KYHh4eHjvwJstBMxSQrtGcCAx4OHh4V3j5YXybJmgxdQ7ZXh4eHhr3n6slbduN8mgHozh4eHhXeCdarzu8Ztm8aqdgYeHh5dG+AfzXWhtIoC3WwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '你去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
