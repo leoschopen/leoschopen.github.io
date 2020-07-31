@@ -29,7 +29,7 @@
 <meta property="og:description" content="学习二分法的时候遇到了一个题目：  给定三个正整数，求a^b%m的值，纠结了好一会，最后发现问题出现在对取模运算法则的不熟悉上面  1234567long long normalPower(long long base,long long power)&amp;#123;    long long result&#x3D;1;    for(int i&#x3D;1;i&lt;&#x3D;power;i+">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-30T02:44:00.000Z">
-<meta property="article:modified_time" content="2020-07-30T02:45:17.033Z">
+<meta property="article:modified_time" content="2020-07-31T09:19:10.196Z">
 <meta property="article:author" content="Leo Schopen">
 <meta property="article:tag" content="二分法">
 <meta name="twitter:card" content="summary">
@@ -194,7 +194,7 @@
 <li>(a * b) % p = (a % p * b % p) % p （3）</li>
 </ol>
 <p>第三条可以得出：多个因子连续的乘积取模的结果等于每个因子取模后的乘积再取模的结果。也就是说，</p>
-<p>(a<em>b</em>c)%d=(a%d<em>b%d</em>c%d)%d;</p>
+<p>(a*b*c)%d=(a%d*b%d*c%d)%d;</p>
 </blockquote>
 <p>有这个法则我们改进代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">long long normalPower(long long base,long long power)&#123;</span><br><span class="line">    long long result&#x3D;1;</span><br><span class="line">    for(int i&#x3D;1;i&lt;&#x3D;power;i++)&#123;</span><br><span class="line">        result&#x3D;result*base%m;&#x2F;&#x2F;result&#x3D;result*base;result&#x3D;result%m;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -220,7 +220,7 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2020-07-30T02:45:17.033Z" itemprop="dateUpdated">2020-07-30 10:45:17</time>
+    Last updated: <time datetime="2020-07-31T09:19:10.196Z" itemprop="dateUpdated">2020-07-31 17:19:10</time>
 </span><br>
 
 
