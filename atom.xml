@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-09-15T15:20:57.764Z</updated>
+  <updated>2021-02-04T12:09:49.301Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,60 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2.4 插入排序和一些细节</title>
+    <link href="http://yoursite.com/2021/02/04/2-4-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E5%92%8C%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82/"/>
+    <id>http://yoursite.com/2021/02/04/2-4-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E5%92%8C%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82/</id>
+    <published>2021-02-04T12:08:00.000Z</published>
+    <updated>2021-02-04T12:09:49.301Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="2-4"><a href="#2-4" class="headerlink" title="2.4"></a>2.4</h1><h2 id="一-插入排序"><a href="#一-插入排序" class="headerlink" title="一.插入排序"></a>一.插入排序</h2><p>数组插入排序</p><p>复杂度：遍历一遍数组，遍历一遍需要插入的部分（已排好序的部分）复杂度为$O(n^2)$</p><p>基本思想：维护一个已经排好序的数组和一个待排序的部分，插入后仍然有序的原则，<strong>从后往前枚举</strong>已有序的部分来确定插入的位置</p><p>temp为待排序的值，i用来遍历整个数组，j用来表示插入位置的index</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertSort</span><span class="params">(<span class="keyword">int</span> a[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = a[i],j=i;</span><br><span class="line">        <span class="keyword">while</span>(j&gt;<span class="number">0</span>;a[j]&lt;a[j<span class="number">-1</span>])&#123;</span><br><span class="line">            a[j]=a[j<span class="number">-1</span>];</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        a[j]=temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>还是一项基本的思路：遍历所有情况，在特定的符合条件的情况下(j&gt;0;a[j]&lt;a[j-1])进行处理</p><p>还有几个细节的地方：</p><blockquote><p>1,这里的数组长度一定要提前知道：</p><p>不能利用sizeof(a)/sizeof(a[0]),数组在做函数参数的时候发生了数组降阶，是一个指针的长度，为4B</p></blockquote><blockquote><p>2,int数组不能使用cin&gt;&gt;a,&gt;&gt;没有对int数组进行重载，会发生没有与这些操作符匹配的&gt;&gt;运算符的错误</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;2-4&quot;&gt;&lt;a href=&quot;#2-4&quot; class=&quot;headerlink&quot; title=&quot;2.4&quot;&gt;&lt;/a&gt;2.4&lt;/h1&gt;&lt;h2 id=&quot;一-插入排序&quot;&gt;&lt;a href=&quot;#一-插入排序&quot; class=&quot;headerlink&quot; title=&quot;一.插入排序&quot;&gt;&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="algorithm" scheme="http://yoursite.com/categories/algorithm/"/>
+    
+    
+      <category term="插入排序" scheme="http://yoursite.com/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>结构体，几种输入以及编程中的误差处理</title>
+    <link href="http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/"/>
+    <id>http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/</id>
+    <published>2021-01-19T12:10:00.000Z</published>
+    <updated>2021-02-04T12:12:01.444Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1-19"><a href="#1-19" class="headerlink" title="1.19"></a>1.19</h1><p>1，如果数组的大小较大，应该将其定义在主函数外面，否则会使程序异常退出，函数内部申请的局部变量来自系统栈，函数外面的全局变量来自静态存储区，允许申请的空间较大</p><p>2，字符数组末尾都有一个空字符“\0”表示字符串的结束，gets和scanf都会自动帮你添加，puts和printf通过识别\0来判断结尾输出</p><p>但getchar不会自动添加，后面会出现乱码（dev c++中是一个换行,VC6.0是乱码，VC6.0里没有初始化的变量值就是0xcccccccc，对应的中文编码刚好就是<strong>“烫”</strong>，字符串输出的时候，<u><strong>指针读取超过了本字符数组的结束而不到下一个字符串的开始</strong></u>，指针指向就是这两个中间的位置这些内存char值一般在VC里会是205，而两个字节的205连在一起，正好是汉字“烫”的代码）</p><p>3，字符数组可以直接输出cout&lt;&lt;str;</p><blockquote><p>整个字符串一次输入</p><p>char c1[5],c2[5];</p><p>cin&gt;&gt;c1&gt;&gt;c2;</p><p>cout&lt;&lt;c1&lt;&lt;” “&lt;&lt;c2&lt;&lt;endl;</p></blockquote><h1 id="1-20"><a href="#1-20" class="headerlink" title="1.20"></a>1.20</h1><h2 id="一、关于结构体在C和C-之间的不同"><a href="#一、关于结构体在C和C-之间的不同" class="headerlink" title="一、关于结构体在C和C++之间的不同"></a>一、关于结构体在C和C++之间的不同</h2><p>1，c++中struct能包含成员函数，能继承，能多态</p><h2 id="二、那C-中的struct和class有什么区别"><a href="#二、那C-中的struct和class有什么区别" class="headerlink" title="二、那C++中的struct和class有什么区别"></a>二、那C++中的struct和class有什么区别</h2><p>最主要的却别是：默认的继承访问权限不同。struct是public的，class是private的。</p><blockquote><p>默认的继承访问权限是看子类到底是用的struct还是class</p></blockquote><img src="https://gitee.com/leoschopen/picture/raw/master/null/20200820180625233.png" alt="png1" style="zoom:25%;" /><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;c version</span><br><span class="line">typedef Struct Student&#123;</span><br><span class="line">int age;</span><br><span class="line">double height;</span><br><span class="line">&#125;Student;</span><br><span class="line">Student student;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;c++ version</span><br><span class="line">Struct Student&#123;</span><br><span class="line">int age;</span><br><span class="line">double height;</span><br><span class="line">&#125;;</span><br><span class="line">Student student;</span><br></pre></td></tr></table></figure><h2 id="三、gets，getline-C-，scanf"><a href="#三、gets，getline-C-，scanf" class="headerlink" title="三、gets，getline(C++)，scanf"></a>三、gets，getline(C++)，scanf</h2><p>1，gets，scanf遇到回车判断停止，gets可以接收空格，scanf不可</p><p>2，getline()和cin.getline()类似，但是cin.getline()属于istream流，而getline()属于string流，是不一样的两个函数</p><blockquote><p>getline(cin,str) string</p><p>cin.getline(str,100)  char array</p></blockquote><p>3，gets=cin.getline()</p><h2 id="四、误差处理"><a href="#四、误差处理" class="headerlink" title="四、误差处理"></a>四、误差处理</h2><p>const double eps = 1e-8</p><p>#define Equ(a,b) (fabs((a)-(b))&lt;(eps))</p><p>关键是把取值约束在某一范围内</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;1-19&quot;&gt;&lt;a href=&quot;#1-19&quot; class=&quot;headerlink&quot; title=&quot;1.19&quot;&gt;&lt;/a&gt;1.19&lt;/h1&gt;&lt;p&gt;1，如果数组的大小较大，应该将其定义在主函数外面，否则会使程序异常退出，函数内部申请的局部变量来自系统栈，函数外面的全局变量
+      
+    
+    </summary>
+    
+    
+      <category term="algorithm" scheme="http://yoursite.com/categories/algorithm/"/>
+    
+    
+      <category term="c" scheme="http://yoursite.com/tags/c/"/>
+    
+      <category term="误差处理" scheme="http://yoursite.com/tags/%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>English Composition</title>
@@ -475,9 +529,9 @@
     <link href="http://yoursite.com/2020/06/04/May-24th-English-Notes/"/>
     <id>http://yoursite.com/2020/06/04/May-24th-English-Notes/</id>
     <published>2020-06-04T11:48:00.000Z</published>
-    <updated>2020-07-12T08:40:22.392Z</updated>
+    <updated>2020-09-17T10:17:37.121Z</updated>
     
-    <content type="html"><![CDATA[<ol><li>The ancestral temple。宗庙。</li><li>Trying to criticize writing on the fly is Possibly the single greatest barrier to writing the most of us encounter。一边写一边批评性</li><li>On the fly，匆忙地在百忙中。We have to eat our lunch on the fly。</li><li>run Water into the glass。灌上水。</li><li>Tempest。暴风雨。</li><li>Interminable无休止的。</li><li>There is a growing body of evidence suggesting that today’s young adults are also drawning in Credit card debate。越来越多的证据表明，如今的年轻人陷入了信用卡债务的泥潭。</li><li>incorporate包含纳入</li><li>harvest收成获得</li><li>straw稻草</li><li>mat垫子woven straw mats编织的草垫</li><li>ears of corns玉米穗</li><li>communal公共的</li><li>alternate交替的轮流的</li><li>The ceremony was followed by a meal</li><li>saturated饱和的saturate使湿透;浸透;使充满;使饱和</li><li>swallow燕子，吞</li><li>alleviate减缓</li><li>badge徽章</li><li>hatch孵出</li><li>Sea-link ferry。海上轮渡。</li><li>Cried into my pillow。头埋进枕头里痛哭一场。</li><li>crown you  athlete of the year。认定你为本年度最佳运动员。</li><li>cane甘蔗</li><li>Sustain injuries。受伤。</li><li>academic calendar校历</li><li>existing perceptions 固有看法</li><li>pastry馅饼</li><li>原始的initial，primitive</li></ol>]]></content>
+    <content type="html"><![CDATA[<ol><li>The ancestral temple。宗庙。</li><li>Trying to criticize writing on the fly is Possibly the single greatest barrier to writing the most of us encounter。一边写一边批评性</li><li>On the fly，匆忙地在百忙中。We have to eat our lunch on the fly。</li><li>run Water into the glass。灌上水。</li><li>Tempest。暴风雨。</li><li>Interminable无休止的。</li><li>There is a growing body of evidence suggesting that today’s young adults are also drowning(浸泡，陷入) in Credit card debate。越来越多的证据表明，如今的年轻人陷入了信用卡债务的泥潭。</li><li>incorporate包含纳入</li><li>harvest收成获得</li><li>straw稻草</li><li>mat垫子woven straw mats编织的草垫</li><li>ears of corns玉米穗</li><li>communal公共的</li><li>alternate交替的轮流的</li><li>The ceremony was followed by a meal</li><li>saturated饱和的saturate使湿透;浸透;使充满;使饱和</li><li>swallow燕子，吞</li><li>alleviate减缓</li><li>badge徽章</li><li>hatch孵出</li><li>Sea-link ferry。海上轮渡。</li><li>Cried into my pillow。头埋进枕头里痛哭一场。</li><li>crown you  athlete of the year。认定你为本年度最佳运动员。</li><li>cane甘蔗</li><li>Sustain injuries。受伤。</li><li>academic calendar校历</li><li>existing perceptions 固有看法</li><li>pastry馅饼</li><li>原始的initial，primitive</li></ol>]]></content>
     
     <summary type="html">
     
@@ -525,60 +579,6 @@
     
     
       <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>May 15th English Notes</title>
-    <link href="http://yoursite.com/2020/05/20/May-15th-English-Notes/"/>
-    <id>http://yoursite.com/2020/05/20/May-15th-English-Notes/</id>
-    <published>2020-05-20T14:38:00.000Z</published>
-    <updated>2020-07-12T08:40:43.894Z</updated>
-    
-    <content type="html"><![CDATA[<p>1，Employ the tricks。采用技巧。</p><p>2，vault 名词，金库，保险柜，地下墓穴。动词跳跃，撑杆跳（pole vault）。</p><p>3，Nursery provision。Service。保育服务。</p><p>4，Give up the ghost。断气儿。</p><p>5，Trick the parents欺骗父母。</p><p>6，Provision条款。规定。</p><p>7，Every trick in the book。千方百计。</p><p>8，Skin tones and hair textures。肤色和发型。</p><p>9，There are barbies  with one of seven skin tones。有七种肤色的芭比娃娃</p><p>10，crack the code 破译密码 crack case 破案 crack problems破解难题</p><p>11，open the door a crack把门开一条缝</p><p>12，grip one’s attention 吸引抓住某人的注意力</p><p>13，strain every nerve竭尽全力</p><p>14，grip with认真考虑并处理</p><p>15，feed 饲料</p><p>16，Disposition性格，性情倾向。意向。排列布置。</p><blockquote><p>have a cheerful disposition性情开朗</p><p>to have/show a disposition towards violence 有 / 表现出暴力倾向</p><p>understand the buildings from the disposition of walls and entrances. 从墙体门窗布局来识别建筑物</p></blockquote><p>17,Breast feeding。母乳喂养。</p><p>18，Have iron nerves。坚强有胆量果敢。</p><p>19，Chuckle。低声轻笑;轻声地笑，暗笑。</p><p>20，candid坦率的，真诚的，偷拍的。</p><p>21，coarse grain 粗粮</p><p>22，resent 感到气愤</p><blockquote><p>He bitterly resents being treated like a child.他十分厌恶被别人当孩子对待。</p><p>resentment不满</p></blockquote><p>23，Appear optimistic，看似乐观。</p><p>24，trunk大箱子。树干。white Poplar。白杨树。</p><p>25，catapult 弹弓;(旧时的)石弩，弩炮;弹射器(用以从舰船上弹射飞机升空)v.(被)猛掷，猛扔</p><p>26，i have this image of you，as always，been cheerful and optimistic。我对你的印象一直都是很快乐和乐观。</p><p>26，cramm 塞，灌，装</p><p>27，we value Originality and independence more than the Chinese我们比中国人更重视创新和自立</p><p>28，The ones who will do the best in the new environment will be those Whose educations have prepared them To be flexible。</p><p>29，Casual acquaint。最熟识的人。</p><p>30，culprit 罪犯，罪魁祸首</p><p>31，Pointed fingers at。指责</p><p>32，round up围捕</p><p>33，A flood of prospectors大量的勘探者。</p><p>prospect前景，v勘探</p><p>34，The crystal sound of running water。清脆的流水声。清楚的，清晰的，清脆的，清澈的。</p><p>The calls of wild birds。野禽的鸣叫声。</p><p>35，in Spite of oneself。不由自主。</p><p>36，Residence permit。居住证。</p><p>37，A flood of words。滔滔不绝。</p><p>38，Communicate。传达。</p><p>39，Rigorous。adj.谨慎的; 细致的; 彻底的; 严格的; 严厉的;</p><p>40，cramp抽筋，痉挛，v阻碍</p><p>cramped狭小的</p><p>41，bijou 小巧玲珑的</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;1，Employ the tricks。采用技巧。&lt;/p&gt;
-&lt;p&gt;2，vault 名词，金库，保险柜，地下墓穴。动词跳跃，撑杆跳（pole vault）。&lt;/p&gt;
-&lt;p&gt;3，Nursery provision。Service。保育服务。&lt;/p&gt;
-&lt;p&gt;4，Give up t
-      
-    
-    </summary>
-    
-    
-      <category term="English " scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="English Notes" scheme="http://yoursite.com/tags/English-Notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>May 13th English Notes</title>
-    <link href="http://yoursite.com/2020/05/14/May-13th-English-Notes/"/>
-    <id>http://yoursite.com/2020/05/14/May-13th-English-Notes/</id>
-    <published>2020-05-14T00:06:31.000Z</published>
-    <updated>2020-05-14T00:06:31.600Z</updated>
-    
-    <content type="html"><![CDATA[<p>1，Sustainable agriculture。可持续发展农业。</p><p>2.Express enthusiasm for。热爱。</p><p>3，Enthusiasm and optimism。热情和积极性。</p><p>4，Of people。Employed。Agriculture Has decreased。</p><p>5，the number of people Employeed in agriculture has fallen。农业的从业人员人数下降。</p><p>6，Credit my account。</p><p>7，Set one aside for you。</p><p>8，How long will the alterations take。</p><p>9，inquire</p><blockquote><p>If you <strong>inquire</strong> about something, you ask for information about it.</p><p>If you <strong>inquire into</strong> something, you investigate it carefully.</p></blockquote><p>​     enquire(also inquire especially in NAmE)</p><p>​     inquiry 调查打听,n</p><blockquote><p><strong>Inquiry</strong> is the process of asking about or investigating something in order to find out more about it.</p></blockquote><p>10， eliminate illiteracy消除文盲</p><p>11，abstract ideas 抽象概念</p><p>12，riddle 谜语</p><p>13，principal原理</p><p>14，inquiry 调查</p><p>15，A lively and inquiring mind，effective communication skills and the ability to work individually or as a part of the team。活泼好学的性格，有效的交流技巧，既有能力独立工作又可以成为团队的一员</p><p>16，A minute proportion。一个微小的部分。</p><p>17，The frontiers of scholarship。学术前沿。</p><p>18，On one’s formula 按原则。</p><p>19，Life jackets，救生衣。</p><p>20，Clip a light onto the jacket。别在</p><p>21，The a generals table for guests。丰富的菜式来招待客人吃饭。</p><p>22，rear 后部，臀部，n，adj，v，抚养，培育，饲养。</p><p>23，census人口普查</p><p>24，The civil affairs Bureau。民政局。</p><p>25，The waves break against the shore。波浪拍岸</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;1，Sustainable agriculture。可持续发展农业。&lt;/p&gt;
-&lt;p&gt;2.Express enthusiasm for。热爱。&lt;/p&gt;
-&lt;p&gt;3，Enthusiasm and optimism。热情和积极性。&lt;/p&gt;
-&lt;p&gt;4，Of people。Employ
-      
-    
-    </summary>
-    
-    
     
   </entry>
   

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>结构体，几种输入以及编程中的误差处理 | Leo&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="c,误差处理">
+    <meta name="description" content="1.191，如果数组的大小较大，应该将其定义在主函数外面，否则会使程序异常退出，函数内部申请的局部变量来自系统栈，函数外面的全局变量来自静态存储区，允许申请的空间较大 2，字符数组末尾都有一个空字符“\0”表示字符串的结束，gets和scanf都会自动帮你添加，puts和printf通过识别\0来判断结尾输出 但getchar不会自动添加，后面会出现乱码（dev c++中是一个换行,VC6.0是乱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="结构体，几种输入以及编程中的误差处理">
+<meta property="og:url" content="http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="1.191，如果数组的大小较大，应该将其定义在主函数外面，否则会使程序异常退出，函数内部申请的局部变量来自系统栈，函数外面的全局变量来自静态存储区，允许申请的空间较大 2，字符数组末尾都有一个空字符“\0”表示字符串的结束，gets和scanf都会自动帮你添加，puts和printf通过识别\0来判断结尾输出 但getchar不会自动添加，后面会出现乱码（dev c++中是一个换行,VC6.0是乱">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/leoschopen/picture/raw/master/null/20200820180625233.png">
+<meta property="article:published_time" content="2021-01-19T12:10:00.000Z">
+<meta property="article:modified_time" content="2021-02-04T12:12:01.444Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="误差处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/leoschopen/picture/raw/master/null/20200820180625233.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Leo&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/null">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Leo Schopen</h5>
+          <a href="mailto:leoschopen@gmail.com" title="leoschopen@gmail.com" class="mail">leoschopen@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/leoschopen" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://weibo.com/6611153997/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">结构体，几种输入以及编程中的误差处理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">结构体，几种输入以及编程中的误差处理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2021-01-19T12:10:00.000Z" itemprop="datePublished" class="page-time">
+  2021-01-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-19"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.19</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-20"><span class="post-toc-number">2.</span> <span class="post-toc-text">1.20</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一、关于结构体在C和C-之间的不同"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">一、关于结构体在C和C++之间的不同</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二、那C-中的struct和class有什么区别"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">二、那C++中的struct和class有什么区别</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#三、gets，getline-C-，scanf"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">三、gets，getline(C++)，scanf</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#四、误差处理"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">四、误差处理</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-结构体，几种输入以及编程中的误差处理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">结构体，几种输入以及编程中的误差处理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2021-01-19 20:10:00" datetime="2021-01-19T12:10:00.000Z"  itemprop="datePublished">2021-01-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="1-19"><a href="#1-19" class="headerlink" title="1.19"></a>1.19</h1><p>1，如果数组的大小较大，应该将其定义在主函数外面，否则会使程序异常退出，函数内部申请的局部变量来自系统栈，函数外面的全局变量来自静态存储区，允许申请的空间较大</p>
+<p>2，字符数组末尾都有一个空字符“\0”表示字符串的结束，gets和scanf都会自动帮你添加，puts和printf通过识别\0来判断结尾输出</p>
+<p>但getchar不会自动添加，后面会出现乱码（dev c++中是一个换行,VC6.0是乱码，VC6.0里没有初始化的变量值就是0xcccccccc，对应的中文编码刚好就是<strong>“烫”</strong>，字符串输出的时候，<u><strong>指针读取超过了本字符数组的结束而不到下一个字符串的开始</strong></u>，指针指向就是这两个中间的位置这些内存char值一般在VC里会是205，而两个字节的205连在一起，正好是汉字“烫”的代码）</p>
+<p>3，字符数组可以直接输出cout&lt;&lt;str;</p>
+<blockquote>
+<p>整个字符串一次输入</p>
+<p>char c1[5],c2[5];</p>
+<p>cin&gt;&gt;c1&gt;&gt;c2;</p>
+<p>cout&lt;&lt;c1&lt;&lt;” “&lt;&lt;c2&lt;&lt;endl;</p>
+</blockquote>
+<h1 id="1-20"><a href="#1-20" class="headerlink" title="1.20"></a>1.20</h1><h2 id="一、关于结构体在C和C-之间的不同"><a href="#一、关于结构体在C和C-之间的不同" class="headerlink" title="一、关于结构体在C和C++之间的不同"></a>一、关于结构体在C和C++之间的不同</h2><p>1，c++中struct能包含成员函数，能继承，能多态</p>
+<h2 id="二、那C-中的struct和class有什么区别"><a href="#二、那C-中的struct和class有什么区别" class="headerlink" title="二、那C++中的struct和class有什么区别"></a>二、那C++中的struct和class有什么区别</h2><p>最主要的却别是：默认的继承访问权限不同。struct是public的，class是private的。</p>
+<blockquote>
+<p>默认的继承访问权限是看子类到底是用的struct还是class</p>
+</blockquote>
+<img src="https://gitee.com/leoschopen/picture/raw/master/null/20200820180625233.png" alt="png1" style="zoom:25%;" />
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;c version</span><br><span class="line">typedef Struct Student&#123;</span><br><span class="line">	int age;</span><br><span class="line">	double height;</span><br><span class="line">&#125;Student;</span><br><span class="line">Student student;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;c++ version</span><br><span class="line">Struct Student&#123;</span><br><span class="line">	int age;</span><br><span class="line">	double height;</span><br><span class="line">&#125;;</span><br><span class="line">Student student;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、gets，getline-C-，scanf"><a href="#三、gets，getline-C-，scanf" class="headerlink" title="三、gets，getline(C++)，scanf"></a>三、gets，getline(C++)，scanf</h2><p>1，gets，scanf遇到回车判断停止，gets可以接收空格，scanf不可</p>
+<p>2，getline()和cin.getline()类似，但是cin.getline()属于istream流，而getline()属于string流，是不一样的两个函数</p>
+<blockquote>
+<p>getline(cin,str) string</p>
+<p>cin.getline(str,100)  char array</p>
+</blockquote>
+<p>3，gets=cin.getline()</p>
+<h2 id="四、误差处理"><a href="#四、误差处理" class="headerlink" title="四、误差处理"></a>四、误差处理</h2><p>const double eps = 1e-8</p>
+<p>#define Equ(a,b) (fabs((a)-(b))&lt;(eps))</p>
+<p>关键是把取值约束在某一范围内</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2021-02-04T12:12:01.444Z" itemprop="dateUpdated">2021-02-04 20:12:01</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="Leo Schopen">
+            Leo Schopen
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/" rel="tag">误差处理</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&title=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&title=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2021/02/04/2-4-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E5%92%8C%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">2.4 插入排序和一些细节</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/09/09/English-Composition/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">English Composition</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Leo Schopen &copy; 2020 - 2021</span>
+            <span>
+                
+                Power by <a href="" target="_blank">Leo</a> 
+            </span>
+        </p>
+    </div>
+</footer>
+<!--添加网站的运行时间-->
+<section class="footer-time">
+    <span class="footer__copyright">
+    <div>
+    <span id="span_dt_dt"> </span>
+    <script language="javascript">
+      function show_date_time(){
+        window.setTimeout("show_date_time()", 1000);
+        BirthDay=new Date("3/31/2020 20:00:00");//这个日期是可以修改的
+        today=new Date();
+        timeold=(today.getTime()-BirthDay.getTime());//其实仅仅改了这里
+        sectimeold=timeold/1000
+        secondsold=Math.floor(sectimeold);
+        msPerDay=24*60*60*1000
+        e_daysold=timeold/msPerDay
+        daysold=Math.floor(e_daysold);
+        e_hrsold=(e_daysold-daysold)*24;
+        hrsold=Math.floor(e_hrsold);
+        e_minsold=(e_hrsold-hrsold)*60;
+        minsold=Math.floor((e_hrsold-hrsold)*60);
+        seconds=Math.floor((e_minsold-minsold)*60);
+        span_dt_dt.innerHTML="Leo's博客已经运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒";
+      }
+      show_date_time();
+    </script>
+    </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+</section>
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&title=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&title=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《结构体，几种输入以及编程中的误差处理》 — Leo's Blog&url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2021/01/19/%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%8C%E5%87%A0%E7%A7%8D%E8%BE%93%E5%85%A5%E4%BB%A5%E5%8F%8A%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%A4%84%E7%90%86/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,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" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '你去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
