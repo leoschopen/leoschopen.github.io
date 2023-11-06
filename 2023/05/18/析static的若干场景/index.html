@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#000000">
+  <meta name="author" content="Leo Schopen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="内存 在C语言中，定义的静态变量在程序中的存储位置取决于它是否被初始化。如果静态变量被初始化了，它就会被分配到数据段（Data Segment）中；如果静态变量没有被初始化，它就会被分配到BSS段（Block Started by Symbol）中 1234567891011#include &lt;stdio.h&gt;int count &#x3D; 0;           &#x2F;&#x2F; 初始化的全局变量st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 浅析static的若干注意事项与场景">
+<meta property="og:url" content="https://leoschopen.github.io/2023/05/18/%E6%9E%90static%E7%9A%84%E8%8B%A5%E5%B9%B2%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="内存 在C语言中，定义的静态变量在程序中的存储位置取决于它是否被初始化。如果静态变量被初始化了，它就会被分配到数据段（Data Segment）中；如果静态变量没有被初始化，它就会被分配到BSS段（Block Started by Symbol）中 1234567891011#include &lt;stdio.h&gt;int count &#x3D; 0;           &#x2F;&#x2F; 初始化的全局变量st">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-18T14:04:00.000Z">
+<meta property="article:modified_time" content="2023-09-01T12:42:35.205Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C++ 浅析static的若干注意事项与场景 - Leo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"leoschopen.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"><link rel="alternate" href="/atom.xml" title="Leo's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++ 浅析static的若干注意事项与场景"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-18 22:04" pubdate>
+          2023年5月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++ 浅析static的若干注意事项与场景</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="内存">内存</h2>
+<p>在C语言中，定义的静态变量在程序中的存储位置取决于它是否被初始化。如果静态变量被初始化了，它就会被分配到数据段（Data Segment）中；如果静态变量没有被初始化，它就会被分配到BSS段（Block Started by Symbol）中</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;           <span class="hljs-comment">// 初始化的全局变量</span><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> array[<span class="hljs-number">100</span>] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;; <span class="hljs-comment">// 初始化的静态变量</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-type">static</span> <span class="hljs-type">int</span> a; <span class="hljs-comment">//BSS</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;count = %d\n&quot;</span>, count);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;array[0] = %d\n&quot;</span>, array[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="静态局部变量">静态局部变量</h2>
+<p>静态局部变量只会初始化一次，这也是“Meyers Singleton”的实现的依据。这种实现方式利用了C++11中静态局部变量的特性，可以保证在多线程环境下只有一个实例被创建，并且在程序运行期间一直存在。这种实现方式的优点是简单、线程安全，而且只有在需要使用单例对象的时候才会创建它，不会占用过多的内存空间。</p>
+<blockquote>
+<p>注意，在C++11之前，静态局部变量的特性与C++11中的静态局部变量略有不同。具体来说，静态局部变量在C++11之前也只会被初始化一次，但是在多线程环境下并没有保证线程安全。为了解决这个问题，需要使用一些线程同步的机制，例如互斥锁（Mutex）、信号量（Semaphore）、原子操作等。另外，也可以使用其他的单例模式实现方式，例如双检锁（Double-Checked Locking）等。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>()&#123;<br>        cout &lt;&lt; <span class="hljs-string">&quot;创建成功！&quot;</span> &lt;&lt; endl;<br>    &#125;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton &amp;<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-type">static</span> Singleton instance;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">threadFunc</span><span class="hljs-params">()</span></span>&#123;<br>    Singleton &amp;singleton = Singleton::<span class="hljs-built_in">getInstance</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-comment">//创建3个线程，每个线程都调用getInstance()函数</span><br>    <span class="hljs-function">thread <span class="hljs-title">t1</span><span class="hljs-params">(threadFunc)</span></span>;<br>    <span class="hljs-function">thread <span class="hljs-title">t2</span><span class="hljs-params">(threadFunc)</span></span>;<br>    <span class="hljs-function">thread <span class="hljs-title">t3</span><span class="hljs-params">(threadFunc)</span></span>;<br>    t1.<span class="hljs-built_in">join</span>();<br>    t2.<span class="hljs-built_in">join</span>();<br>    t3.<span class="hljs-built_in">join</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>注意要链接pthread库 -lpthread</p>
+<p>最终只会输出一个创建成功</p>
+<h2 id="类的静态成员">类的静态成员</h2>
+<ol>
+<li>这个成员直接与类相关，和对象是没有关系的，但是对象可以访问共享，静态成员函数没有this指针，不能定义为const函数，<strong>因为我本来就和对象无关，const没有意义</strong></li>
+<li>存在于任何类的对象之外，在构建类的时候，会将静态成员定义在类的外面而不是类中，类的存储空间里不会有这一块内容</li>
+<li>static关键字只在类内写，在类外不写，而且<strong>static函数中不要有非static成员，因为我掉你这个函数的时候，没有this指针，对象都不存在</strong></li>
+<li>类的静态成员不要再内部进行初始化，除了使用constexpr关键字，可以用字面值替换，但不是在内存中真的声明了一个地方，只是在这个类内进行一个数据的替换，如果想要在类外进行调用使用还是要进行一个类外的声明。</li>
+<li>类的静态成员必须要类外初始化，c++11以后，只有在静态成员变量声明为 <code>constexpr</code> 或者枚举类型时，才能在类内进行初始化。对于其他类型的非常量静态成员变量，仍然需要在类外部进行初始化。</li>
+<li>只有<strong>非静态成员变量</strong>才<strong>属于类的对象</strong>上，静态以及非静态成员函数都不属于类对象</li>
+</ol>
+<h2 id="C-中-static-对象的初始化">C++ 中 static 对象的初始化</h2>
+<blockquote>
+<p>C++中的static对象是指存储区不属于stack和heap、”寿命”从被构造出来直至程序结束为止的对象。这些对象包括全局对象，定义于namespace作用域的对象，在class、function以及file作用域中被声明为static的对象。其中，函数内的static对象称为local static 对象，而其它static对象称为non-local static对象。</p>
+</blockquote>
+<p>对于local static对象，在其所属的函数被调用之前，该对象并不存在，即只有在第一次调用对应函数时，local static对象才被构造出来。</p>
+<p>而对于non-local static对象，在main()函数开始前就已经被构造出来，并在main()函数结束后被析构。</p>
+<p>C++规定，<strong>non-local static 对象的初始化发生在 main 函数执行之前</strong>。但 C++没有规定多个 non-local static 对象的初始化顺序，尤其是来自多个编译单元的 non-local static 对象，他们的初始化顺序是随机的。</p>
+<p>然而，<strong>对于 local static 对象，其初始化发生在控制流第一次执行到该对象的初始化语句时。</strong> non-local static 对象的初始化发生在 main 函数之前的单线程启动阶段，所以无需担心线程安全问题。但是 local static 对象则不同，多个线程的控制流可能同时到达其初始化语句。</p>
+<p><strong>在 C++11 之前，在多线程环境下 local static 对象的初始化并不是线程安全的</strong>。具体表现就是：如果一个线程正在执行 local static 对象的初始化语句但还没有完成初始化，此时若其它线程也执行到该语句，那么这个线程会认为自己是第一次执行该语句并进入该 local static 对象的构造函数中。这会造成这个 local static 对象的重复构造，进而产生内存泄露问题。</p>
+<p>在文章的后半部分会看到，local static 对象在单例模式中有着广泛的应用，为了解决 local static 对象在多线程环境下的重复构造问题，程序员想出了很多方法。而 C++11 则在语言的规范中解决了这个问题。<strong>C++11 规定，在一个线程开始 local static 对象的初始化后完成初始化前，其他线程执行到这个 local static 对象的初始化语句就会等待，直到该 local static 对象初始化完成。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerClassA</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">InnerClassA</span>() &#123; cout &lt;&lt; <span class="hljs-string">&quot;in ctor of InnerClassA&quot;</span> &lt;&lt; endl; &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">InnerClassB</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">InnerClassB</span>() &#123; cout &lt;&lt; <span class="hljs-string">&quot;in ctor of InnerClassB&quot;</span> &lt;&lt; endl; &#125;<br>    ~<span class="hljs-built_in">InnerClassB</span>() &#123; cout &lt;&lt; <span class="hljs-string">&quot;in dtor of InnerClassB&quot;</span> &lt;&lt; endl; &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WrapperClassA</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">WrapperClassA</span>() &#123;&#125;<br><br>    <span class="hljs-function">InnerClassA&amp; <span class="hljs-title">singleton</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-type">static</span> InnerClassA innerObjA;  <span class="hljs-comment">// local static object</span><br>        <span class="hljs-keyword">return</span> innerObjA;<br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// class with non-local static object</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WrapperClassB</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">WrapperClassB</span>() &#123;&#125;<br>    <span class="hljs-type">static</span> InnerClassB innerObjB;<br>&#125;;<br><br>InnerClassB WrapperClassB::innerObjB;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;main() started.&quot;</span> &lt;&lt; endl;<br>    WrapperClassA objA;<br>    objA.<span class="hljs-built_in">singleton</span>();   <span class="hljs-comment">//只有去掉注释执行该语句时,innerObjA才被构造出来</span><br>    cout &lt;&lt; <span class="hljs-string">&quot;main() terminated.&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="单例设计模式的饿汉模式存在的no-local-static问题">单例设计模式的饿汉模式存在的no-local static问题</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">single</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> single* p;<br>     <span class="hljs-built_in">single</span>() &#123;&#125;<br>    ~<span class="hljs-built_in">single</span>() &#123;&#125;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> single* <span class="hljs-title">getinstance</span><span class="hljs-params">()</span></span>;<br>&#125;<br>single* single::p = <span class="hljs-keyword">new</span> <span class="hljs-built_in">single</span>();<br><span class="hljs-function">single* <span class="hljs-title">single::getinstance</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="static函数-变量定义到头文件中，而该头文件被不同的文件引用">static函数/变量定义到头文件中，而该头文件被不同的文件引用</h3>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43121830/article/details/116711159">https://blog.csdn.net/qq_43121830/article/details/116711159</a></p>
+<p>实际测试也可以看到，第一种情况下，static变量在不同文件中的地址不一样</p>
+<ol>
+<li>使用两个文件引用相同头文件（只有static&amp;&amp;不加预编译指令）</li>
+<li>使用两个文件引用相同头文件（有其他变量&amp;&amp;不加预编译指令）</li>
+<li>使用两个文件引用相同头文件（有其他变量&amp;&amp;加预编译指令）</li>
+<li>两种修正方法与相关知识点</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++ 浅析static的若干注意事项与场景</div>
+      <div>https://leoschopen.github.io/2023/05/18/析static的若干场景/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Leo Schopen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年5月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/05/24/%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%E7%9A%84%E8%8B%A5%E5%B9%B2%E9%97%AE%E9%A2%98/" title="进程同步与互斥相关内容总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">进程同步与互斥相关内容总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/31/%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E9%97%AE%E9%A2%98/" title="数组名作为函数参数的问题&amp;sizeof()函数">
+                        <span class="hidden-mobile">数组名作为函数参数的问题&amp;sizeof()函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

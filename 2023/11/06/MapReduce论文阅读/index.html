@@ -1,0 +1,825 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#000000">
+  <meta name="author" content="Leo Schopen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MapReduce论文阅读 相关背景 Google需要在TB级别的数据上进行大量的计算，比如对所有的网页创建索引并进行查找排序，词频排序，多台机器上文件进行grep，如何将这个操作跑在几千台机子上？ 要么就是针对这个具体的场景设置并行计算，分布式软件，但是google想要一个框架，使得工程师只要表述想要执行的简单运算即可，而不必关心并行计算、容错、数据分布、负载均衡等复杂的细节，也可以完成大规模的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MapReduce论文阅读">
+<meta property="og:url" content="https://leoschopen.github.io/2023/11/06/MapReduce%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="MapReduce论文阅读 相关背景 Google需要在TB级别的数据上进行大量的计算，比如对所有的网页创建索引并进行查找排序，词频排序，多台机器上文件进行grep，如何将这个操作跑在几千台机子上？ 要么就是针对这个具体的场景设置并行计算，分布式软件，但是google想要一个框架，使得工程师只要表述想要执行的简单运算即可，而不必关心并行计算、容错、数据分布、负载均衡等复杂的细节，也可以完成大规模的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/qf2u8VEiHeUKQTh.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/1OhoWAIQ6nqtJEd.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/06/ZOcUGXC19a87Ki6.png">
+<meta property="og:image" content="c:\Users\Schopen\AppData\Roaming\Typora\typora-user-images\image-20231105195340888.png">
+<meta property="article:published_time" content="2023-11-06T12:43:00.000Z">
+<meta property="article:modified_time" content="2023-11-06T12:48:10.709Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="MapReduce">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/06/qf2u8VEiHeUKQTh.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>MapReduce论文阅读 - Leo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"leoschopen.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"><link rel="alternate" href="/atom.xml" title="Leo's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MapReduce论文阅读"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-06 20:43" pubdate>
+          2023年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MapReduce论文阅读</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>MapReduce论文阅读</h1>
+<h2 id="相关背景">相关背景</h2>
+<p>Google需要在TB级别的数据上进行大量的计算，比如对所有的网页创建索引并进行查找排序，词频排序，多台机器上文件进行grep，如何将这个操作跑在几千台机子上？</p>
+<p>要么就是针对这个具体的场景设置并行计算，分布式软件，但是google想要一个框架，使得工程师只要表述想要执行的简单运算即可，而不必关心并行计算、容错、数据分布、负载均衡等复杂的细节，也可以完成大规模的分布式运算。这些问题都被封装在了一个库里面：利用一个输入 key/value pair 集合来产生一个输出的 key/value pair 集合。这就是mapReduce框架出现的背景。</p>
+<p>这些需要解决的问题往往是通用的</p>
+<p><strong>多机并行协同，网络通信，错误处理，提高执行效率等</strong></p>
+<p>google三件客 gfs bigtable</p>
+<p>《MapReduce: Simplified Data Processing on Large Clusters 》</p>
+<img src="https://s2.loli.net/2023/11/06/qf2u8VEiHeUKQTh.png" srcset="/img/loading.gif" lazyload alt="image-20231106203642238" style="zoom:25%;" />
+<p>Map本质就是拆解Reduce就是拼接</p>
+<h2 id="场景">场景</h2>
+<p>mapreduce的6大过程在不同场景下的体现</p>
+<p>词频排序</p>
+<img src="https://s2.loli.net/2023/11/06/1OhoWAIQ6nqtJEd.png" srcset="/img/loading.gif" lazyload alt="image-20231106203705498" style="zoom:25%;" />
+<p>重建倒排索引</p>
+<p>输入是文件与内容，输出就是单词以及相应的文档号</p>
+<p>map就是将每个内容拆分出单词与文档号，后面reduce进行汇合</p>
+<p>分布式grep等等…</p>
+<h2 id="MapReduce">MapReduce</h2>
+<h3 id="介绍">介绍</h3>
+<p>多个机器，用以太网交换机相连</p>
+<p>使用内部的分布式的文件系统来管理磁盘上的数据，文件系统通过复制在不可靠的硬件上保证数据的可靠性和有效性</p>
+<p>用户提交job，每个job都包含一系列的任务task，调度系统将这些任务调度到集群中多台可用的机器上</p>
+<p>采用分而治之的思想，将大的计算任务分为小的计算任务，将文件分片导不同的datanode上，每个node单独做一定的操作，最后reduce</p>
+<h3 id="流程">流程</h3>
+<img src="https://s2.loli.net/2023/11/06/ZOcUGXC19a87Ki6.png" srcset="/img/loading.gif" lazyload alt="image-20231106203738933" style="zoom: 25%;" />
+<img src="C:\Users\Schopen\AppData\Roaming\Typora\typora-user-images\image-20231105195340888.png" srcset="/img/loading.gif" lazyload alt="image-20231105195340888" style="zoom:25%;" />
+<p>将输入的数据使用map函数返回一个kv对作为中间数据集合，然后将相同k的数据集合在一起输入到reduce函数中处理执行，reduce合并这些数据，最后返回处理后的结果</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-keyword">map</span><span class="hljs-function"><span class="hljs-params">(k1,v1)</span> -&gt;</span><span class="hljs-keyword">list</span>(k2,v2)<br>reduce<span class="hljs-function"><span class="hljs-params">(k2,<span class="hljs-keyword">list</span>(v2))</span> -&gt;</span><span class="hljs-keyword">list</span>(v2)<br></code></pre></td></tr></table></figure>
+<ol>
+<li>首先有一个用户进程，用来定义需要运行什么，有哪些事</li>
+<li>会分析数据有多少，拆分为<strong>M片</strong>，这里需要一个数据的格式，将数据变成KV的形式</li>
+<li>需要一个master worker，跟其他的等级一样，只不过干一些特殊的事情，作为用户的代理来协调整个过程，比如协调各个worker拿不同的数据</li>
+<li>每个map worker读取相应的输入数据，解析出kv对，然后交给map函数生成中间kv对，在缓存中存储相应的数据</li>
+<li>缓存中的kv对分成<strong>R个区域</strong>，之后周期性地写入本地磁盘上，缓存的kv对在本地磁盘上的位置再回传给master，master将这些存储位置传给reduce worker</li>
+<li>reduce worker做数据的整合，使用rpc读取这些数据，对key进行排序后使得相同的k的值聚合在一起，不同的key值会映射到相同的reduce任务上，因为中间数据太大无法再内存中完成排序，那么就要外部排序</li>
+<li>reduce worker遍历排序后的中间数据，将key以及对应的value list送给reduce函数，reduce输出被追加到所属分区的输出文件</li>
+<li>当所有的map和reduce认为都完成后，master唤醒用户程序</li>
+</ol>
+<h3 id="优点">优点</h3>
+<p>这个过程很利于<strong>并行化</strong>，map可以在多个机器上，这些机器之间不需要协调，没有依赖，没有同步问题，所有的依赖性和协调过程被隐藏在map和reduce的数据分发和收集之间，但是map和reduce之间是有依赖是串行的</p>
+<p>那么这个模型就能够应对局部性失败的容错性，系统不会因为小的局部机器的失败造成整个系统的崩溃和不可用，这也是分布式容错性的本质-在不可靠的硬件上构建可靠的软件</p>
+<h3 id="容错">容错</h3>
+<h4 id="worker-故障">worker 故障</h4>
+<p>master 与 worker 之间同步心跳，对于失效的 worker，根据其类型来做进一步处理：</p>
+<ul>
+<li>Map worker 故障：由于 Map 任务将数据临时存储在本地，所以需要重新执行。</li>
+<li>Reduce worker 故障：由于 Reduce 任务将数据存储在全局文件系统中 ，所以不需要重新执行。</li>
+</ul>
+<h4 id="master-故障">master 故障</h4>
+<p>MapReduce 任务重新执行</p>
+<h4 id="故障语义保证">故障语义保证</h4>
+<p>当map和reduce函数的操作是确定性函数（相同的输入产生相同输出），mapreduce的分布式结果与其一致</p>
+<h3 id="存储位置优化">存储位置优化</h3>
+<p>核心思想：本地读文件以减少流量消耗</p>
+<p>MapReduce 的 master 在调度 Map 任务时会考虑输入文件的位置信息，尽量将一个 Map 任务调度在包含相关输入数据拷贝的机器上执行；如果上述努力失败了，master 将尝试在保存有输入数据拷贝的机器附近的机器上执行 Map 任务（例如，分配到一个和包含输入数据的机器在一个交换机里的 worker 机器上执行）。</p>
+<h3 id="任务粒度">任务粒度</h3>
+<p>理想情况下，M 和 R 应当比集群中 worker 的机器数量要多得多。在每台 worker 机器都执行大量的不同任务能够提高集群的动态的负载均衡能力，并且能够加快故障恢复的速度：失效机器上执行的大量 Map 任务都可以分布到所有其他的 worker 机器上去执行。</p>
+<p>实际使用时建议用户选择合适的 M 值，以使得每一个独立任务都是处理大约 16M 到 64M 的输入数据（这样，上面描写的输入数据本地存储优化策略才最有效），另外，也建议把 R 值设置使用的 worker 机器数量的小倍数。比如：M=200000，R=5000，使用 2000 台 worker 机器</p>
+<h3 id="backup进程">backup进程</h3>
+<p>影响一个 MapReduce 的总执行时间最通常的因素是“落伍者”：在运算过程中，如果有一台机器花了很长的时间才完成最后几个 Map 或 Reduce 任务，导致 MapReduce 操作总的执行时间超过预期。</p>
+<p>为了解决落伍者的问题，当一个 MapReduce 操作<strong>接近完成的时候</strong>，master 调度备用（backup）任务进程来执行剩下的、<strong>处于处理中状态</strong>（in-progress）的任务。无论是最初的执行进程、还是备用（backup）任务进程完成了任务，MapReduce 都把这个任务标记成为已经完成。此个机制通常只会占用比正常操作多几个百分点的计算资源。但能减少近 50% 的任务完成总时间。</p>
+<h3 id="Details">Details</h3>
+<h4 id="分区函数">分区函数</h4>
+<p>缺省的分区函数是使用 hash 方法（比如，hash(key) mod R) ，将同一个key保存在同一个输出文件中。</p>
+<h3 id="Contribution">Contribution</h3>
+<ul>
+<li>使用简单的接口实现了自动化的并行化和大规模的分布式计算，通过使用 MapReduce 模型接口实现了在大量普通 PC 机上的高性能计算。</li>
+<li>证明MapReduce在分布式计算上的可行性，拉开分布式计算序幕，影响后续的Spark，Flink等。</li>
+</ul>
+<h3 id="不足">不足</h3>
+<ul>
+<li>由于成本等原因，没有利用内存更高效处理数据</li>
+<li>没有将资料调度和计算调度分离。使得MapReduce 系统看起来较为冗杂。在开源的 Hadoop 生态中，MapReduce 现只关注于计算，具体的资源调度由 Yarn 管理。</li>
+</ul>
+<h3 id="总结">总结</h3>
+<ul>
+<li>网络带宽是稀有资源。大量的系统优化是针对减少网络传输量为目的的：本地优化策略使大量的数据从本地磁盘读取，中间文件写入本地磁盘、并且只写一份中间文件也节约了网络带宽。</li>
+<li>多次执行相同的任务可以减少硬件配置不平衡带来的负面影响，同时解决了由于机器失效导致的数据丢失问题。</li>
+</ul>
+<h2 id="相关系统">相关系统</h2>
+<ul>
+<li>分布式存储系统：GFS/Colossus/HDFS</li>
+<li>批处理框架：Spark</li>
+<li>流处理框架：Flink</li>
+<li>高可用机制：Chubby/ZooKeeper</li>
+</ul>
+<h2 id="相关资料">相关资料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/video/1.html">6.824 视频</a></li>
+<li><a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">论文</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ConnorChen97/paper/blob/0a72fe0b354b65bac25e45163163eb2573f1faf2/map-reduce/map-reduce-cn.pdf">中文翻译</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="category-chain-item">分布式</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" class="category-chain-item">论文阅读</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/MapReduce/">#MapReduce</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MapReduce论文阅读</div>
+      <div>https://leoschopen.github.io/2023/11/06/MapReduce论文阅读/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Leo Schopen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/14/RAII%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D/" title="RAII原理介绍">
+                        <span class="hidden-mobile">RAII原理介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
