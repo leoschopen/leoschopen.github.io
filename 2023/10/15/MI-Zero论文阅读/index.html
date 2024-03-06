@@ -1,0 +1,989 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#000000">
+  <meta name="author" content="Leo Schopen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Title: Visual Language Pretrained Multiple Instance Zero-Shot Transfer for Histopathology Images (基于自然语言处理的多实例零样本转换用于组织病理学图像)   Authors: Ming Y. Lu, Bowen Chen, Andrew Zhang, Drew F.K. Williamson, R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MI-Zero论文阅读">
+<meta property="og:url" content="https://leoschopen.github.io/2023/10/15/MI-Zero%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="Title: Visual Language Pretrained Multiple Instance Zero-Shot Transfer for Histopathology Images (基于自然语言处理的多实例零样本转换用于组织病理学图像)   Authors: Ming Y. Lu, Bowen Chen, Andrew Zhang, Drew F.K. Williamson, R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230716100316.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230716100337.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230717211705.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/boxplots.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230717211514.png">
+<meta property="article:published_time" content="2023-10-15T06:19:00.000Z">
+<meta property="article:modified_time" content="2024-03-06T01:20:32.140Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="MI-Zero">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230716100316.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>MI-Zero论文阅读 - Leo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"leoschopen.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"><link rel="alternate" href="/atom.xml" title="Leo's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MI-Zero论文阅读"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-15 14:19" pubdate>
+          2023年10月15日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          89 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MI-Zero论文阅读</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <ul>
+<li>
+<p>Title: Visual Language Pretrained Multiple Instance Zero-Shot Transfer for Histopathology Images (基于自然语言处理的多实例零样本转换用于组织病理学图像)</p>
+</li>
+<li>
+<p>Authors: Ming Y. Lu, Bowen Chen, Andrew Zhang, Drew F.K. Williamson, Richard J. Chen, Tong Ding, Long Phi Le, Yung-Sung Chuang, Faisal Mahmood</p>
+</li>
+<li>
+<p>Affiliation: Massachusetts Institute of Technology</p>
+</li>
+<li>
+<p>GitHub: <a target="_blank" rel="noopener" href="https://github.com/mahmoodlab/MI-Zero">https://github.com/mahmoodlab/MI-Zero</a></p>
+</li>
+<li>
+<p>a. 理论背景:</p>
+<ul>
+<li>本文介绍了MI-Zero，这是一个使用对比视觉语言预训练的框架，可以实现对千亿像素整张组织病理学切片图像的零样本迁移。作者提出了一种简单的基于多实例学习的方法，利用预训练的视觉语言编码器执行多个下游诊断任务，无需额外的标签。MI-Zero将零样本迁移重新定义为多实例学习的框架，克服了对极大图像进行推理的计算挑战。所提出的方法利用了超过55万份病理报告和其他可用的领域内文本语料库来预训练文本编码器。通过有效利用强大的预训练编码器，最佳模型在超过33k个组织病理图像-标题对上进行预训练，实现了在三个不同的真实癌症亚型任务中的平均中位零样本准确率为70.2%。所提出的框架可以用于在CPATH中扩展病理分类，涵盖大量的临床任务和可能的发现，这使得它成为计算病理学中弱监督深度学习的有希望的方法。</li>
+</ul>
+</li>
+<li>
+<p>b. 技术路线:</p>
+<ul>
+<li>本文描述了一种用于不同组织的整张切片图像（WSIs）的零样本分类的框架。所提出的方法涉及对文本和图像进行无监督预训练的单模编码器，从公开可用的文本编码器进行初始化，并使用对比损失来对齐视觉和语言嵌入。该框架中的图像分类的零样本迁移使用基于提示的分类，其中提示包括类名和模板，并从嵌入的文本中形成线性分类器。在对千亿像素WSIs进行零样本迁移时，该方法首先将每个WSI划分为较小的块进行处理，并使用基于集合或基于图的表示来计算整张切片的预测分数。前者使用排列不变算子，而后者考虑每个补丁的空间位置并构建k最近邻图。所提出的框架为高多样性和异质性的WSIs的准确和高效分类提供了新的机会。</li>
+</ul>
+</li>
+</ul>
+<h1>4 结果:</h1>
+<ul>
+<li>a. 详细的实验设置:
+<ul>
+<li>本文介绍了MI-Zero，一种在病理学中使用千亿像素整张组织病理学切片图像实现零样本迁移的方法。MI-Zero能够为给定的类别标签检索相关的感兴趣区域（ROIs），在组织病理学的半监督学习工作流中非常有用。使用MI-Zero创建的模型通常表现与或优于ABMIL基线模型，每个任务仅使用1%的训练数据。TopK池化的性能优于均值池化，但空间平滑的影响较小。对文本编码器进行预训练可以提高性能，但在领域内病理文本上进行预训练并不一定会导致更好的性能。整理更大规模的高质量图像-标题对数据集可以进行更广泛的测试，有价值的未来方向包括探索改进视觉语言预训练样本效率的方法，并评估MI-Zero在执行各种视觉语言理解任务方面的能力。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230716100316.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230716100337.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h1>1 Motivation</h1>
+<p>传统的视觉语言模型训练适合的任务都是较小的图像，但是病理图像很大，缺少图-文字pair，并且通常没有文本描述、边界框注释甚至ROI标签。</p>
+<p>但是比如CLIP这样的就是用很多网络上的任务无关的数据训练模型后</p>
+<p>MI-zero就是使用<strong>对比视觉语言预训练</strong>的方法，可以实现对千亿像素整张组织病理学切片图像的零样本迁移。<br>
+框架还是多实例学习。</p>
+<h1>2 Method</h1>
+<h2 id="2-1-Pretrain">2.1 Pretrain</h2>
+<p><strong>文本编码器</strong>是基于GPT-style自回归变换器-称为HistPathGPT<br>
+输入每个单词预测下一个单词的概率<br>
+likelihood of each token under an autoregressive generative model parameterized by $\phi$ :<br>
+$$<br>
+\mathcal{L}<em>{\mathrm{clm}}(\phi)=-\sum</em>{t=1}^{T+1} \log p\left(w_t \mid w_{0: t-1} ; \phi\right)<br>
+$$<br>
+使用大规模数据上训练的权重进行初始化，训练数据选择一个550k的临床病理报告和400k的 pubmed 摘要</p>
+<p>模型是gpt2-medium  355M</p>
+<p>那么与此对比的是BioClinicalBert和PubMedBert，他们是在PubMed abstracts和MIMIC（临床的一些数据）上进行训练的</p>
+<p><strong>图像编码器</strong>是两种：一个是使用imagenet预训练的权重，另一个是使用自监督学习的在15.5M的未标注的病理图像patch上训练的sota：CtransPath</p>
+<h2 id="2-2-对齐">2.2 对齐</h2>
+<p>跨模态对比损失-temperature scaled M-way classification 这个M是bs</p>
+<h4 id="2-2-0-1-两个经过编码器的嵌入表示是">2.2.0.1 两个经过编码器的嵌入表示是</h4>
+<p>$\mathbf{u}_m=\frac{f\left(\mathbf{x}_m ; \theta\right)}{\left|f\left(\mathbf{x}_m ; \theta\right)\right|}$ and $\mathbf{v}_m=\frac{g\left(\mathbf{t}m ; \phi\right)}{\left|g\left(\mathbf{t}m, \phi\right)\right|}$.<br>
+具体而言，$\mathbf{u}_m$是通过将图像样本$\mathbf{x}_m$输入到视觉编码器$f(\cdot;\theta)$中，得到其视觉嵌入表示，然后通过归一化操作得到的$\ell_2$-normalized视觉嵌入表示。同样地，$\mathbf{v}_m$是通过将文本样本$\mathbf{t}_m$输入到文本编码器$g(\cdot;\phi)$中，得到其文本嵌入表示，然后通过归一化操作得到的$\ell_2$-normalized文本嵌入表示。</p>
+<p>这里的嵌入表示是用于表示输入数据的低维向量，具有良好的表达能力。将输入数据映射到嵌入空间中可以使得相似的数据在嵌入空间中距离较近，不相似的数据距离较远。因此，在跨模态对比损失函数中使用嵌入表示，可以使得图像和文本样本在嵌入空间中更好地对齐，以便后续训练模型。</p>
+<p>对于归一化操作，除以$\left|f\left(\mathbf{x}_m ; \theta\right)\right|$或$\left|g\left(\mathbf{t}_m, \phi\right)\right|$的目的是将嵌入表示的范数归一化为使得嵌入表示在不同的样本之间具有可比性和相对距离的意义。</p>
+<h4 id="2-2-0-2-两个方向的对比学习">2.2.0.2 两个方向的对比学习</h4>
+<p>训练阶段是对称的去联合优化模型的</p>
+<p>使用余弦相似度，交叉熵损失函数，将图像和文本的视觉和文本嵌入表示对齐<br>
+两个方向，图像与文本，文本与图像<br>
+$$<br>
+\begin{aligned}<br>
+\mathcal{L}<em>{i 2 t}(\theta, \phi) &amp; =-\sum</em>{i=1}^M \log \frac{\exp \left(\tau \boldsymbol{u}_i^T \boldsymbol{v}<em>i\right)}{\sum</em>{j=1}^M \exp \left(\tau \boldsymbol{u}<em>i^T \boldsymbol{v}<em>j\right)} \<br>
+\mathcal{L}</em>{t 2 i}(\theta, \phi) &amp; =-\sum</em>{j=1}^M \log \frac{\exp \left(\tau \boldsymbol{v}_j^T \boldsymbol{u}<em>j\right)}{\sum</em>{i=1}^M \exp \left(\tau \boldsymbol{v}_j^T \boldsymbol{u}_i\right)}<br>
+\end{aligned}<br>
+$$</p>
+<p>其中相似度就是$\boldsymbol{u}_i^T \boldsymbol{v}_j$-余弦相似度</p>
+<p>那么这个M-way就是说训练的时候每个batch是M个pair看做是一个M分类问题，对应的一个pair是正样本，图像（文本）和其他的文本（图像）视为负样本类别</p>
+<p>这里的t是一个温度超参数，调节模型对于正负样本的区分，如果很小，就会更加平坦，正负样本之间分数的差异就会变小</p>
+<p>在图像-文本方向上，图像和配对文本是正，图像和其他文本是一个负</p>
+<h2 id="2-3-Zero-shot-transfer">2.3 Zero-shot transfer</h2>
+<p>该方法利用了最近的<strong>基于文本提示的零样本分类方法</strong>CLIP<br>
+其基本思想是通过给定一些文本提示，来对图像进行分类，即将图像分类问题转化为文本分类问题。<br>
+方法的核心是the idea of learning perception from supervision contained in natural language.<br>
+此外他不是通过图像预测文本确切单词，而是将二者联合起来配对</p>
+<ol>
+<li>数据预处理：从数据集中提取每个类别的名称，并为每个类别构造一个文本提示。文本提示由两部分组成：类别名称和模板。类别名称是类别的名称，例如“腺癌”，模板是一个包含空格的字符串，其中空格的位置是需要用图像来填充的位置，例如“展示{}的图像”。</li>
+<li>对图像，文本进行编码。对于每个待分类的图像$\mathrm{x}$，首先使用图像编码器将其编码为一个$\ell_2$-规范化的图像嵌入向量$\mathbf{u}$。然后，对于每个待分类的类别$m$，将其文本提示$\mathbf{t}_m$输入到训练好的文本编码器中，得到一个文本嵌入向量$\mathbf{w}_m$。为了使得不同类别的文本嵌入向量可以进行比较，需要将其都进行$\ell_2$-规范化。</li>
+<li>最后，对于每个待分类的图像，将其图像嵌入向量与所有类别的文本嵌入向量进行内积，得到一个关于类别的得分向量$\left(\mathbf{u}^T \mathbf{w}_m \right),m=1, \ldots, C$，其中$C$是类别的总数。最终，将得分最高的类别作为模型的分类预测结果。</li>
+</ol>
+<h4 id="2-3-0-1-Prompt-engineering-and-ensembling">2.3.0.1 Prompt engineering and ensembling</h4>
+<p><strong>得到候选类别 prompt 嵌入向量的步骤是:</strong></p>
+<p>对于每个类别,我们定义一个类别名称和一个 prompt 模板。例如:</p>
+<ul>
+<li>类别名称: “腺癌”</li>
+<li>Prompt 模板: “显示{}的图像”</li>
+</ul>
+<p>将这两个组合起来,得到完整的 prompt:“显示腺癌的图像”，我们将这个完整的 prompt<strong>文本</strong> feeding 到训练好的文本编码器中, 得到这个类别的 prompt 嵌入向量:</p>
+<p>$$\begin{equation}<br>
+\mathbf{w}_m = \frac{g(\textbf{t}_m;\phi)}{\lVert g(\textbf{t}_m;\phi) \rVert}<br>
+\end{equation}$$</p>
+<p>其中 $\textbf{t}_m$ 是这个类别的完整 prompt , $g(\cdot; \phi)$ 是文本编码器。生成的文本嵌入向量 $\mathbf{w}_m$ 被规范化为单位长度。</p>
+<p>我们对<strong>所有候选类别</strong>重复这个过程,为每个类别在相同的模板下生成一个 prompt 嵌入向量。这形成了候选类别的 prompt 嵌入向量集合:${\mathbf{w}_m},m=1,\ldots, C$,其中 C 是类别的总数。</p>
+<p>这些 prompt 嵌入向量<strong>被用来计算每个块嵌入向量的相似度分数</strong>,如文章中方程所示:$\mathbf{s}_i = \mathbf{u}_i^T [\mathbf{w}_1, \mathbf{w}_2, \ldots, \mathbf{w}_C]$</p>
+<p>总的来说,候选类别的 prompt 嵌入向量是通过 feeding 类别名称+模板的完整 prompt 到文本编码器中来获得规范化后的文本嵌入向量,每个类别一个。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/511460120">为什么要用Prompt engineering和Prompt ensembling呢？</a></p>
+<p>prompt是在做微调或者直接做推理时的一种方法，起到的是一个提示的作用，也就是文本的引导作用。不能只用一个单词因为在不同的语境下会有一个歧义的问题，需要放在句子里面有一个上下文的提示。此外训练的预测也要保持一个一致性，不能是训练进来的是一个句子，测试是一个单词，这就有一个distribution gap的问题，抽出来的特征可能就不好。</p>
+<p>基于这两个问题，作者就提出了一种方式去做prompt template，通过这个模板就能把单词变成句子，此外通过为每个任务自定义提示文本可以显著提高zero shot的能力。<br>
+比如动物数据集使用A photo of a {label}, a type of pet.” 这样就缩小了解空间</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1SL4y1s7LQ/?spm_id_from=333.999.0.0">CLIP 论文逐段精读【论文精读】_哔哩哔哩_bilibili</a></p>
+<h3 id="2-3-1-Zero-shot-transfer-for-gigapixel-WSIs">2.3.1 Zero-shot transfer for gigapixel WSIs</h3>
+<p>两种表示一个是这个集合表示一个是图表示</p>
+<h4 id="2-3-1-1-集合表示">2.3.1.1 集合表示</h4>
+<p>1)将整片切片分成 N 块小块</p>
+<p>2)使用图像编码器计算每个小块的嵌入向量 ${\mathbf{u}_i},i=1,\ldots,N$</p>
+<p>3)根据候选类别对应的 prompt 嵌入向量 ${\mathbf{w}_m},m=1,\ldots, C$,计算每个小块的分数 ${\mathbf{s}_i},i=1,\ldots,N$，这样就有了每个patch在不同类别上的一个得分</p>
+<p>4)在集合表示下,直接使用不变汇聚算子(如平均池化或 TopK 最大池化)汇总所有小块的分数,获得整片切片的预测，topk就是在每个patch的分数向量$\mathcal{S}$中找到类别c的分数向量的前k高个取平均值，最后每个类别都有一个分数，这样就有了这个patch在所有类别上的分数了</p>
+<p>$$<br>
+\begin{gathered}<br>
+h_{\text {mean }}(\mathcal{S})=\frac{1}{N} \sum_{i=1}^N \mathbf{s}<em>i \<br>
+h</em>{\mathrm{topK}}(\mathcal{S})=\frac{1}{K}\left[\sum_{i=1}^K \tilde{s}<em>i^1, \sum</em>{i=1}^K \tilde{s}<em>i^2, \ldots, \sum</em>{i=1}^K \tilde{s}<em>i^C\right]^T<br>
+\end{gathered}<br>
+$$<br>
+where $\mathcal{S}</em>{\text {topK }}^c=\left{\tilde{s}<em>i^c\right}</em>{i=1, \ldots, K}$ is the set of the $K$ largest score values from $\mathcal{S}$ for class $c=1, \ldots, C$.</p>
+<h4 id="2-3-1-2-图表示">2.3.1.2 图表示</h4>
+<p>在图表示下,先在每个小块的 K 最近邻域内进行分数平滑(如均值平滑),然后再使用汇聚算子获得整片切片的预测</p>
+<p>具体做法如下:</p>
+<ol>
+<li>为整片切片中的每个小块构建一个有向的 K 最近邻图。该图用$\mathcal{G} = {\mathcal{M}, \mathcal{E}}$表示,其中:</li>
+</ol>
+<ul>
+<li>$\mathcal{M}$是节点集,每个节点对应一个小块</li>
+<li>$\mathcal{E}$是边集,表示节点(小块)与其空间邻居的连接</li>
+</ul>
+<ol start="2">
+<li>每个节点 i 的值为其相似度分数向量$\mathbf{s}_i$</li>
+<li>然后对相似度分数向量进行空间平滑(如平均)。目的是考虑小块的空间位置信息。原先的分数只是考虑自己的特征，平滑后的分数向量可以更好地表示整片切片的分类倾向，这里选用的方式是均值滤波，<br>
+具体来说,节点 i 的相似度分数向量$\mathbf{s}<em>i$替换为:$h</em>\mathrm{mean}(\mathcal{S}<em>\mathrm{neighbors})$<br>
+其中:$\mathcal{S}</em>\mathrm{neighbors} = {\mathbf{s}_j: j \in {i} \cup \mathcal{N}(i)}$ and $\mathcal{N}(i) = {j: (i, j) \in \mathcal{E}}$</li>
+</ol>
+<p>这相当于对每个小块的 K 最近邻域应用一个均值滤波器。</p>
+<ol start="4">
+<li>最后,使用不变汇聚算子(如平均池化或 TopK 最大池化)汇聚图中的平滑分数,从而得到整片切片级预测分数。</li>
+</ol>
+<p>总的来说,图表示考虑了每个小块的空间位置,并建立一个表示空间邻居关系的图。然后在该图表示中对相似度分数进行平滑,最后汇聚平滑后的分数来获得整片切片的预测。</p>
+<h2 id="2-4-Experiments-and-results">2.4 Experiments and results</h2>
+<h3 id="2-4-1-Visual-language-pretraining">2.4.1 Visual language pretraining</h3>
+<ol>
+<li>文本编码器:<br>
+我们训练了一个自定义的 HistPathGPT 文本编码器。使用自定义的分词器</li>
+</ol>
+<ul>
+<li>使用波特分解(BPE) ,词表大小为 32000</li>
+<li>使用最后一个字词的隐状态来建模文本嵌入</li>
+<li>对于 BioClinicalBert 和 PubmedBert，我们使用提供的公开可用的模型权重和标记器，并使用 [CLS] 标记作为文本嵌入。</li>
+</ul>
+<ol start="2">
+<li>图像编码器:<br>
+使用在未标记的组织病理学斑块上使用自监督表示学习进行训练的 SOTA CTransPath [77] (CTP) 编码器<br>
+<img src="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230717211705.png" srcset="/img/loading.gif" lazyload alt=""></li>
+</ol>
+<p>ssl：自监督学习</p>
+<p>我们使用一个线性投影,将文本和图像嵌入映射到 512 维的嵌入空间,实现对齐。<br>
+3. 对齐嵌入空间:<br>
+我们使用跨视图对比损失来对齐图像编码器和文本编码器的嵌入空间。视图指的是图像视角和文本视角。<br>
+跨视图对比损失利用了这两个视角下的信息:</p>
+<ul>
+<li>如果一对图像和文本是同一个实例的两个视角,那么它们应该相似</li>
+<li>如果图像和文本来源不同,那么它们应该不相似</li>
+</ul>
+<ol>
+<li>训练details:</li>
+</ol>
+<ul>
+<li>图像resize到448*448大小</li>
+<li>使用水平翻转,垂直翻转等数据增强</li>
+<li>在8台A100 GPU上训练50个epochs,全局batch size 为512</li>
+</ul>
+<ol>
+<li>hyperparameters:<br>
+其他有关 hyperparameters 和预训练详情见 Paper Supplementary Materials。</li>
+</ol>
+<p>总的来说:</p>
+<ul>
+<li>作者训练了一个自定义的文本编码器</li>
+<li>使用预训练的自监督图像编码器</li>
+<li>使用投影头映射文本图像嵌入到同一嵌入空间</li>
+<li>使用跨视图对比损失对齐嵌入空间</li>
+<li>通过训练超参数和细节,完成图像和文本编码器的预训练</li>
+</ul>
+<h3 id="2-4-2-下游任务的数据集">2.4.2 下游任务的数据集</h3>
+<p>来自一个医院的3中wsi数据集，做一个癌症的亚型分类<br>
+1.独立 BRCA 数据集:</p>
+<ul>
+<li>来自布里格姆和女性医院(BWH)的乳腺癌切片数据集</li>
+<li>包含100张生长浸润性哲列癌(IDC)切片和100张生长浸润性乳腺肉瘤(ILC)切片<br>
+2.独立的NSCLC 数据集:</li>
+<li>BWH 的非小细胞肺癌切片数据集</li>
+<li>包含100张肺腺癌(LUAD)切片和100张肺鳞癌(LUSC)切片<br>
+3.独立 RCC 数据集:</li>
+<li>BWH 的肾细胞癌切片数据集</li>
+<li>包含50 张柱刷细胞肾细胞癌(CHRCC) 切片,50 张清细胞肾细胞癌(CCRCC) 切片和50 张乳头状细胞肌癌(PRCC)切片<br>
+此外,作者还在 Supplementary Materials 中报告了使用TCGA 公开数据集做同样的三个亚型分类任务的结果。</li>
+</ul>
+<h3 id="2-4-3-零样本迁移">2.4.3 零样本迁移</h3>
+<p>依赖于提示，评估结果会随着类名和提示模板的选择而变化。找了50个提示并评估其效果，那么这个实验其实可以评估模型的性能。<br>
+<img src="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/boxplots.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="2-4-4-在WSI上的zero-shot">2.4.4 在WSI上的zero-shot</h3>
+<p>做了很多实验，对模型的不同模块比如在医学数据集上训练的文本编码器HistPathGPT，非医学数据上训练的PubMedBert and BioClinicalBert，还有从头开始训练的编码器</p>
+<p>尝试了不同的pooling，发现topK pooling更好。此外发现加上空间平滑之后没啥变化，对文本编码器进行预训练比不进行预训练可以提高性能，但对域内病理文本进行预训练并不一定会产生更好的性能。</p>
+<p>模型在每项任务中使用 1% 的训练数据，表现与 ABMIL 基线相当或更好。<br>
+<img src="https://raw.githubusercontent.com/leoschopen/typoraPicture/master/20230717211514.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h1>5 Notes</h1>
+<h2 id="5-1-对比视觉语言预训练">5.1 对比视觉语言预训练</h2>
+<p>Contrastive visual language pretraining</p>
+<p>使用<strong>图像和语言联合训练</strong>的方法，主要目的是让计算机理解图像和语言之间的联系，从而提高其视觉理解和自然语言处理能力。该方法可以用于训练新的语言感知图像编码器，也可以用于增强现有预训练模型的零样本视觉识别能力。</p>
+<p>这个方法的核心思想是将图像和语言作为输入，在一个共同的特征空间中进行嵌入，使得相似的图像和语言嵌入在特征空间中距离更近，而不相似的图像和语言嵌入距离更远。这个过程中，模型会学习到如何将图像和语言信息结合起来，从而使得模型能够理解图像和语言之间的关联性。</p>
+<p>在训练时，通常会使用一些<strong>对比损失函数</strong>，比如说&quot;Contrastive loss&quot;或&quot;Triplet loss&quot;，以确保相似的图像和语言嵌入距离更近，而不相似的图像和语言嵌入距离更远。通过这种方式，模型可以学习到如何将图像和语言信息结合在一起，并且可以在没有任何标签信息的情况下进行图像分类和语言理解。</p>
+<p>这种方法可以应用于多种场景，比如图像描述生成、图像问答、视觉推理、图像分类等。例如，当模型接收到一个未见过的图像时，它可以使用先前学习到的语言嵌入来推断出该图像的内容，从而实现零样本视觉识别。</p>
+<h3 id="5-1-1-对比学习">5.1.1 对比学习</h3>
+<p>构建正样本对和负样本对，其中正样本对的嵌入应该在模型的潜在空间中最大程度地对齐，而负样本对的嵌入应该相距甚远。</p>
+<h2 id="5-2-zero-shot">5.2 zero-shot</h2>
+<p>没有经过特定的目标类别的标记样本的训练但是可以对未知的样本进行分类的方法</p>
+<p>其场景主要是这个数据比较难以获取，要求模型的泛化能力要比较好</p>
+<h2 id="5-3-处理CPATH的标准方式">5.3 处理CPATH的标准方式</h2>
+<p>Weakly-supervised deep learning for computational pathology (CPATH) has rapidly become a standard approach for modelling whole slide image (WSI) data [9, 30, 47,71,73].</p>
+<ol>
+<li>slide与标签</li>
+<li>切patch，embedding，学习如何聚合patch的embedding进行预测</li>
+<li>得到分类器</li>
+</ol>
+<h2 id="5-4-对不同的任务开发特定模型的局限性和需求">5.4 对不同的任务开发特定模型的局限性和需求</h2>
+<p>特定病种有特定的数据来训练，但是不能迁移，想要一个模型通吃是不行的，因为有的癌症数据很少</p>
+<p>所以可以用自监督学习，因为有些组织类型之间，某些局部特征（如肿瘤细胞、淋巴细胞和基质）可能是相似的，可以进行迁移学习。但是虽然能够捕获小图上的特征，在整个slide上仍然需要标签</p>
+<p>所以为了跨域，这个任务就是一个任务不可知的模型开发，你也不知道这个模型用来看哪个癌症</p>
+<h2 id="5-5-向量内积与余弦相似度">5.5 向量内积与余弦相似度</h2>
+<p>向量的内积和向量的余弦相似度是相关的，但并不完全相同。</p>
+<p>向量的内积是指两个向量中对应位置的元素相乘后再求和的结果，即$\mathbf{u}^T\mathbf{v}=\sum_{i=1}^n u_iv_i$，其中$\mathbf{u}$和$\mathbf{v}$是长度为$n$的向量。向量的余弦相似度是指两个向量之间的夹角余弦值，即$\frac{\mathbf{u}^T\mathbf{v}}{|\mathbf{u}|_2|\mathbf{v}|_2}$，其中$|\cdot|_2$表示向量的$\ell_2$范数，$\mathbf{u}$和$\mathbf{v}$是长度为$n$的向量。</p>
+<p>可以发现，当$\mathbf{u}$和$\mathbf{v}$都被$\ell_2$规范化为单位向量时，它们的内积等于它们的余弦相似度，即$\mathbf{u}^T\mathbf{v}=|\mathbf{u}|_2|\mathbf{v}|_2\cos\theta$，其中$\theta$表示两个向量的夹角。因此，在这种情况下，向量的内积和余弦相似度是等价的。</p>
+<p>然而，在一般情况下，两者并不完全相同，因为它们分别考虑了向量的不同特征。向量的内积强调的是向量的数值特征，即向量中每个元素的大小和符号，而余弦相似度强调的是向量的方向特征，即向量的朝向和夹角。因此，两个向量的内积和余弦相似度都可以表示它们之间的相似程度，但是它们对向量的特征的重视程度不同。</p>
+<h2 id="5-6-topk池化">5.6 topk池化</h2>
+<p>向量s是(n_Patch,m),m列的每一列找前k大的取平均，最后再看这个分数<br>
+topk就是在每个patch的分数向量$\mathcal{S}$中找到类别c的分数向量的前k高个取平均值，最后每个类别都有一个分数，这样就有了这个patch在所有类别上的分数了</p>
+<p>对比损失类似或者相似的公式广泛用于自监督表示学习</p>
+<h1>Related</h1>
+<h2 id="文本编码器">文本编码器</h2>
+<h3 id="BioMedLM-PubMedGPT">BioMedLM/PubMedGPT</h3>
+<p>2.7B <a target="_blank" rel="noopener" href="https://huggingface.co/stanford-crfm/BioMedLM">stanford-crfm/BioMedLM · Hugging Face</a><br>
+GPT-style model<br>
+英文<br>
+知识问答<br>
+128 A100-40GB<br>
+GPT Neo 2.7B<br>
+解码器：标准GPT-2 tokenizer（使用 Flash Attention 训练）</p>
+<h3 id="LLaMA">LLaMA</h3>
+<p>模型大小7B 和 13B 版本分别压至约 4 GB 和 8 GB<br>
+使用cpu</p>
+<p>中文<a target="_blank" rel="noopener" href="https://github.com/CVI-SZU/Linly">GitHub - CVI-SZU/Linly: Chinese-LLaMA 1&amp;2、Chinese-Falcon 基础模型；ChatFlow中文对话模型；中文OpenLLaMA模型；NLP预训练/指令微调数据集</a></p>
+<h3 id="文档内容抽取">文档内容抽取</h3>
+<p>使用ERNIE-UIE和ERNIE-Health进行药品说明书的信息抽取和知识图谱构建</p>
+<h3 id="Visual-Med-Alpaca"># Visual Med-Alpaca</h3>
+<p>基于 LLaMa-7B，医疗多模态LLM<br>
+<a target="_blank" rel="noopener" href="https://github.com/cambridgeltl/visual-med-alpaca">GitHub - cambridgeltl/visual-med-alpaca: Visual Med-Alpaca is an open-source, multi-modal foundation model designed specifically for the biomedical domain, built on the LLaMa-7B.</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/IDEA-CCNL/Fengshenbang-LM">GitHub - IDEA-CCNL/Fengshenbang-LM: Fengshenbang-LM(封神榜大模型)是IDEA研究院认知计算与自然语言研究中心主导的大模型开源体系，成为中文AIGC和认知智能的基础设施。</a></p>
+<p>中文开源CLIP<a target="_blank" rel="noopener" href="https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-102M-Chinese">IDEA-CCNL/Taiyi-CLIP-Roberta-102M-Chinese · Hugging Face</a>基于一个预训练的chinese bert和ViT-B-32</p>
+<p>生成式语言模型医疗：<a target="_blank" rel="noopener" href="https://github.com/GanjinZero/BioBART">GitHub - GanjinZero/BioBART: BioBART: Pretraining and Evaluation of A Biomedical Generative Language Model [ACL-BioNLP 2022]</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="category-chain-item">大模型</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MI-Zero/">#MI-Zero</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MI-Zero论文阅读</div>
+      <div>https://leoschopen.github.io/2023/10/15/MI-Zero论文阅读/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Leo Schopen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/06/MapReduce%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" title="MapReduce论文阅读">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MapReduce论文阅读</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/06/CLIP%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" title="CLIP系列论文阅读">
+                        <span class="hidden-mobile">CLIP系列论文阅读</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

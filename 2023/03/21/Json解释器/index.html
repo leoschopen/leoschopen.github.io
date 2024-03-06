@@ -1,0 +1,840 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#000000">
+  <meta name="author" content="Leo Schopen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="问题记录 pragma once #pragma once 是一个预处理指令，用于防止头文件被重复包含。当一个头文件被包含多次时，编译器会尝试多次包含这个头文件，这可能会导致重复定义的错误。使用 #pragma once 可以确保头文件只被编译一次，避免了这种错误的发生。 使用 #pragma once 的优点是它比传统的头文件保护方式更简单、更方便。传统的头文件保护方式需要编写宏定义和条件编译指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Json解释器">
+<meta property="og:url" content="https://leoschopen.github.io/2023/03/21/Json%E8%A7%A3%E9%87%8A%E5%99%A8/index.html">
+<meta property="og:site_name" content="Leo&#39;s Blog">
+<meta property="og:description" content="问题记录 pragma once #pragma once 是一个预处理指令，用于防止头文件被重复包含。当一个头文件被包含多次时，编译器会尝试多次包含这个头文件，这可能会导致重复定义的错误。使用 #pragma once 可以确保头文件只被编译一次，避免了这种错误的发生。 使用 #pragma once 的优点是它比传统的头文件保护方式更简单、更方便。传统的头文件保护方式需要编写宏定义和条件编译指">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-21T03:54:00.000Z">
+<meta property="article:modified_time" content="2024-03-06T01:22:26.585Z">
+<meta property="article:author" content="Leo Schopen">
+<meta property="article:tag" content="json">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Json解释器 - Leo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"leoschopen.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"><link rel="alternate" href="/atom.xml" title="Leo's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/bg.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Json解释器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-21 11:54" pubdate>
+          2023年3月21日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Json解释器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="问题记录">问题记录</h2>
+<h3 id="pragma-once">pragma once</h3>
+<p><code>#pragma once</code> 是一个预处理指令，用于防止头文件被重复包含。当一个头文件被包含多次时，编译器会尝试多次包含这个头文件，这可能会导致重复定义的错误。使用 <code>#pragma once</code> 可以确保头文件只被编译一次，避免了这种错误的发生。</p>
+<p>使用 <code>#pragma once</code> 的优点是它比传统的头文件保护方式更简单、更方便。传统的头文件保护方式需要编写宏定义和条件编译指令，而 <code>#pragma once</code> 只需要一行指令即可。</p>
+<p>需要注意的是，<code>#pragma once</code> 并不是 C 或 C++ 标准中定义的指令，不是所有的编译器都支持它。因此，为了保险起见，在编写头文件时最好同时使用传统的头文件保护方式。<br>
+通常的做法是在头文件开头加入以下代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> HEADER_NAME_H</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> HEADER_NAME_H</span><br><br><span class="hljs-comment">// 头文件内容</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* HEADER_NAME_H */</span></span><br></code></pre></td></tr></table></figure>
+<h3 id="json头文件定义">json头文件定义</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">namespace</span> leo&#123;  <br>    <span class="hljs-keyword">namespace</span> json&#123;  <br>        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Json</span> &#123;  <br>        <span class="hljs-keyword">public</span>:  <br>            <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Type</span> &#123;  <br>                json_null = <span class="hljs-number">0</span>,  <br>                json_bool,  <br>                json_int,  <br>                json_double,  <br>                json_string,  <br>                json_array,  <br>                json_object  <br>            &#125;;  <br>            <span class="hljs-built_in">Json</span>();  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">bool</span> b);  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">int</span> i);  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">double</span> d);  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">const</span> string &amp;s);  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *s);  <br>            <span class="hljs-built_in">Json</span>(Type type);  <br>            <span class="hljs-built_in">Json</span>(<span class="hljs-type">const</span> Json &amp;other);<span class="hljs-comment">//拷贝构造函数  </span><br>        <span class="hljs-keyword">private</span>:  <br>            <span class="hljs-keyword">union</span> <span class="hljs-title class_">Value</span> &#123;  <br>                <span class="hljs-type">bool</span> m_bool;  <br>                <span class="hljs-type">int</span> m_int;  <br>                <span class="hljs-type">double</span> m_double;  <br>                string *m_string;  <br>                vector&lt;Json&gt; *m_array;  <br>                map&lt;string, Json&gt; *m_object;  <br>            &#125;;  <br>            Type m_type;  <br>            Value m_value;  <br>        &#125;;  <br>    &#125;  <br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="为什么要使用双层namespace">为什么要使用双层namespace</h3>
+<p>双层命名空间的使用可以避免命名冲突，提高代码的可读性和可维护性。</p>
+<p>在C++中，命名空间是一种将全局作用域分割为独立区域的机制。通过使用命名空间，我们可以将相似或相关的函数、类、变量等声明在同一个命名空间下，防止在不同的代码模块中出现同名的函数或变量，从而避免命名冲突。</p>
+<p>双层命名空间的使用可以更进一步地将不同的功能或模块进行分离，提高代码的组织性和可读性。在本例中，&quot;leo&quot;和&quot;json&quot;两个命名空间分别代表了不同的功能或模块，将它们结合起来可以更加清晰地表达代码的结构和意图。</p>
+<h3 id="为什么要使用enum">为什么要使用enum</h3>
+<p>使用枚举类型(enum)可以使代码更加易读、易懂，同时可以提高代码的可维护性。</p>
+<p>枚举类型是一种C++语言的数据类型，用于定义一组命名的整型常量。在实际的编程中，我们通常需要定义一些常量，比如颜色、状态、类型等等。如果使用普通的整型常量来表示这些常量，代码可读性会比较差，容易出错，而且可维护性也不好。而使用枚举类型可以将这些常量定义在一起，通过枚举名称来引用，使代码更加清晰易读。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//定义一个枚举类型</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Color</span> &#123;<br>    RED,    <span class="hljs-comment">//默认值为0</span><br>    GREEN,  <span class="hljs-comment">//默认值为1</span><br>    BLUE    <span class="hljs-comment">//默认值为2</span><br>&#125;;<br><br><span class="hljs-comment">//声明一个变量，并初始化为枚举类型的某个值</span><br>Color myColor = RED;<br><br><span class="hljs-comment">//使用枚举类型作为函数参数</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printColor</span><span class="hljs-params">(Color c)</span> </span>&#123;<br>    <span class="hljs-keyword">switch</span>(c) &#123;<br>        <span class="hljs-keyword">case</span> RED:<br>            cout &lt;&lt; <span class="hljs-string">&quot;红色&quot;</span> &lt;&lt; endl;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> GREEN:<br>            cout &lt;&lt; <span class="hljs-string">&quot;绿色&quot;</span> &lt;&lt; endl;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> BLUE:<br>            cout &lt;&lt; <span class="hljs-string">&quot;蓝色&quot;</span> &lt;&lt; endl;<br>            <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//调用函数，传入枚举类型的值</span><br><span class="hljs-built_in">printColor</span>(GREEN);<br></code></pre></td></tr></table></figure>
+<p>枚举类型实际上是一组具有整型值的常量，其中默认的类型是int。在枚举类型中，每个枚举常量都对应一个整数值，第一个枚举常量默认值为0，后续的枚举常量默认值递增1。</p>
+<p>在C++11标准中，可以使用enum class来定义枚举类型，可以显式指定枚举常量的底层类型，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Color</span> : <span class="hljs-type">int</span> &#123;<br>    RED = <span class="hljs-number">1</span>,<br>    GREEN = <span class="hljs-number">2</span>,<br>    BLUE = <span class="hljs-number">4</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="为什么要使用union">为什么要使用union</h3>
+<p>使用union可以将不同的数据类型共用同一块内存，从而节省内存空间，提高代码的效率和性能。</p>
+<p>在C++中，union是一种特殊的数据类型，它允许在同一块内存空间中存储不同类型的数据。这些数据共用同一块内存，但只有其中一个数据可以被访问。当访问一个数据时，我们需要确定它的类型，否则可能会出现错误的结果。</p>
+<p>使用union主要有以下几个优点：</p>
+<ol>
+<li>
+<p>节省内存空间：由于不同的数据类型共用同一块内存，因此可以节省内存空间。</p>
+</li>
+<li>
+<p>提高效率：由于union中的数据共用同一块内存，因此可以提高代码的运行效率。</p>
+</li>
+<li>
+<p>灵活性：使用union可以灵活地处理不同的数据类型，提高代码的可读性和可维护性。</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">union</span> <span class="hljs-title class_">Data</span> &#123;<br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">float</span> f;<br>    <span class="hljs-type">char</span> str[<span class="hljs-number">20</span>];<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Data data;<br>    data.i = <span class="hljs-number">10</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;整型数据：&quot;</span> &lt;&lt; data.i &lt;&lt; endl;<br><br>    data.f = <span class="hljs-number">3.14</span>;<br>    cout &lt;&lt; <span class="hljs-string">&quot;浮点型数据：&quot;</span> &lt;&lt; data.f &lt;&lt; endl;<br><br>    <span class="hljs-built_in">strcpy</span>(data.str, <span class="hljs-string">&quot;Hello World&quot;</span>);<br>    cout &lt;&lt; <span class="hljs-string">&quot;字符型数据：&quot;</span> &lt;&lt; data.str &lt;&lt; endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="CMake">CMake</h3>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.5</span>)  <br>  <br><span class="hljs-keyword">project</span>(json)  <br>  <br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">11</span>)  <br>  <br><span class="hljs-keyword">add_library</span>(json STATIC json/json.cpp json/json.h)  <br>  <br><span class="hljs-keyword">add_executable</span>(json_test main.cpp)  <br><span class="hljs-keyword">target_link_libraries</span>(json_test json)<br></code></pre></td></tr></table></figure>
+<h3 id="类型转换重载">类型转换重载</h3>
+<p>希望将Json类型直接转换为基本类型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//基本类型的转换-运算符重载  </span><br><span class="hljs-type">bool</span> b = v2;<br><br><span class="hljs-function">Json::<span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> </span>&#123;  <br>    <span class="hljs-keyword">if</span> (m_type != json_bool) &#123;  <br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">logic_error</span>(<span class="hljs-string">&quot;type error, not bool&quot;</span>);  <br>    &#125;  <br>    <span class="hljs-keyword">return</span> m_value.m_bool;  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="arr-0-true">arr[0] = true;</h3>
+<p>这句话的执行的背后需要一系列的实现<br>
+首先使用中括号的风格进行索引因此要重载，重载的时候的数字索引需要能够正确返回内容</p>
+<ol>
+<li>首先是采用索引就意味着arr对象是一个数组类型，因此要进行类型转换</li>
+<li>使用等于号就意味着自定义类型的类型转换，我们需要重载类型转换参考上一节</li>
+<li>这里要注意，当我们输入index=0的时候会自动创建空的vector，而访问空的vector是一个未定义的行为，所以不可以</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json &amp;Json::<span class="hljs-keyword">operator</span>[](<span class="hljs-type">int</span> index) &#123;  <br>    <span class="hljs-keyword">if</span> (m_type != json_array) &#123;  <br>        m_type = json_array;  <br>        m_value.m_array = <span class="hljs-keyword">new</span> <span class="hljs-built_in">vector</span>&lt;Json&gt;();  <br>    &#125;  <br>    <span class="hljs-type">int</span> size = m_value.m_array-&gt;<span class="hljs-built_in">size</span>();  <br>    <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) &#123;  <br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">out_of_range</span>(<span class="hljs-string">&quot;index out of range&quot;</span>);  <br>    &#125;  <br>    <span class="hljs-comment">//如果index大于size，那么就要扩容，等于size的时候，就是在最后添加一个元素  </span><br>    <span class="hljs-keyword">if</span> (index &gt;= size) &#123;  <br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = size; i &lt; index; ++i) &#123;  <br>            <span class="hljs-comment">//调用Json的默认构造函数，这样就会导致m_type为json_null  </span><br>            m_value.m_array-&gt;<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">Json</span>());  <br>        &#125;  <br>    &#125;  <br>    <span class="hljs-keyword">return</span> m_value.m_array-&gt;<span class="hljs-built_in">at</span>(index);  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="左值连续访问">左值连续访问</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json label = v[<span class="hljs-string">&quot;data&quot;</span>];  <br><span class="hljs-type">int</span> current = v[<span class="hljs-string">&quot;data&quot;</span>][<span class="hljs-string">&quot;officialVerify&quot;</span>][<span class="hljs-string">&quot;type&quot;</span>];  <br>cout &lt;&lt; current &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+<p>那么就要求重载的<code>[]</code>的返回值是左值，可以看到，返回的对象还是一个object对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++">Json &amp;Json::<span class="hljs-keyword">operator</span>[](<span class="hljs-type">const</span> string &amp;key) &#123;  <br>    <span class="hljs-keyword">if</span> (m_type != json_object) &#123;  <br>        m_type = json_object;  <br>        m_value.m_object = <span class="hljs-keyword">new</span> <span class="hljs-built_in">unordered_map</span>&lt;string, Json&gt;();  <br>    &#125;  <br>    <span class="hljs-keyword">return</span> (m_value.m_object)-&gt;<span class="hljs-keyword">operator</span>[](key);  <br>&#125;  <br>  <br>Json &amp;Json::<span class="hljs-keyword">operator</span>[](<span class="hljs-type">const</span> <span class="hljs-type">char</span> *key) &#123;  <br>    <span class="hljs-function">string <span class="hljs-title">str</span><span class="hljs-params">(key)</span></span>;  <br>    <span class="hljs-keyword">return</span> (*<span class="hljs-keyword">this</span>)[str];  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="为什么需要深拷贝">为什么需要深拷贝</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Json::copy</span><span class="hljs-params">(<span class="hljs-type">const</span> Json &amp;other)</span> </span>&#123;  <br>    m_type = other.m_type;  <br>    <span class="hljs-keyword">switch</span> (m_type) &#123;  <br>        <span class="hljs-keyword">case</span> json_null:  <br>            <span class="hljs-keyword">break</span>;  <br>        <span class="hljs-keyword">case</span> json_bool:  <br>            m_value.m_bool = other.m_value.m_bool;  <br>            <span class="hljs-keyword">break</span>;        <span class="hljs-keyword">case</span> json_int:  <br>            m_value.m_int = other.m_value.m_int;  <br>            <span class="hljs-keyword">break</span>;        <span class="hljs-keyword">case</span> json_double:  <br>            m_value.m_double = other.m_value.m_double;  <br>            <span class="hljs-keyword">break</span>;        <span class="hljs-keyword">case</span> json_string:  <br>            m_value.m_string = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>(*other.m_value.m_string);<span class="hljs-comment">//深拷贝  </span><br>            <span class="hljs-keyword">break</span>;  <br>        <span class="hljs-keyword">case</span> json_array:  <br>            m_value.m_array = <span class="hljs-keyword">new</span> <span class="hljs-built_in">vector</span>&lt;Json&gt;(*other.m_value.m_array);  <br>            <span class="hljs-keyword">break</span>;        <span class="hljs-keyword">case</span> json_object:  <br>            m_value.m_object = <span class="hljs-keyword">new</span> <span class="hljs-built_in">map</span>&lt;string, Json&gt;(*other.m_value.m_object);  <br>            <span class="hljs-keyword">break</span>;        <span class="hljs-keyword">default</span>:  <br>            <span class="hljs-keyword">break</span>;  <br>    &#125;  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="解释器功能">解释器功能</h3>
+<p>实现将string字符串解释为Json格式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> string &amp;str = <span class="hljs-string">&quot;hello&quot;</span>;  <br>Json v;  <br>v.<span class="hljs-built_in">parse</span>(str);<br></code></pre></td></tr></table></figure>
+<p>主要是json类的parse能够将字符串存为json格式<br>
+他的方式是创建一个解释器类，使用load载入string内容<br>
+将此内容转换为json</p>
+<h3 id="单括号、双括号、反斜杠">单括号、双括号、反斜杠</h3>
+<p><strong>单引号（<code>'</code>）</strong></p>
+<p>单引号用于表示单个字符，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">char</span> a = <span class="hljs-string">&#x27;A&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ol>
+<li>单引号只能包含一个字符。例如，<code>'AB'</code>是不合法的。</li>
+<li>要表示特殊字符，如单引号本身、反斜杠等，需要使用转义字符。例如：<code>'\''</code>表示单引号，<code>'\\'</code>表示反斜杠。</li>
+</ol>
+<p><strong>双引号（<code>&quot;</code>）</strong></p>
+<p>双引号用于表示字符串，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::string s = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br></code></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ol>
+<li>字符串必须用双引号括起来。例如，<code>'Hello, World!'</code>是不合法的。</li>
+<li>要表示特殊字符，如双引号本身、反斜杠等，需要使用转义字符。例如：<code>&quot;\&quot;&quot;</code>表示双引号，<code>&quot;\\&quot;</code>表示反斜杠。</li>
+<li>字符串字面量会自动在末尾添加一个空字符（<code>'\0'</code>）作为字符串终止符。</li>
+</ol>
+<p><strong>转义字符</strong></p>
+<p>在某些情况下，需要使用转义字符（<code>\</code>）。以下是一些常见的转义字符：</p>
+<ul>
+<li><code>\\</code>：反斜杠本身</li>
+<li><code>\'</code>：单引号</li>
+<li><code>\&quot;</code>：双引号</li>
+<li><code>\n</code>：换行符</li>
+<li><code>\r</code>：回车符</li>
+<li><code>\t</code>：制表符（水平制表符）</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">char</span> single_quote = <span class="hljs-string">&#x27;\&#x27;&#x27;</span>;      <span class="hljs-comment">// 合法，使用转义字符表示单引号</span><br>std::string str_with_quotes = <span class="hljs-string">&quot;He said, \&quot;Hello, World!\&quot;&quot;</span>; <span class="hljs-comment">// 合法，使用转义字符表示双引号</span><br></code></pre></td></tr></table></figure>
+<p>总结：</p>
+<ul>
+<li>当使用单引号表示字符时，如果需要表示单引号或反斜杠，需要使用转义字符。</li>
+<li>当使用双引号表示字符串时，如果需要表示双引号或反斜杠，需要使用转义字符。</li>
+</ul>
+<h3 id="下标索引的变化">下标索引的变化</h3>
+<p>get_next_char是输出当前位置然后指针后移一位<br>
+在进入到类型解析器中时，指针指向第二个位置，获取位置值后，指针指向第三个位置，为了获取第二个位置，需要将指针后退一位</p>
+<p>这里while循环中的第一句获取内容可以去掉吗？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">Json <span class="hljs-title">Parser::parse_object</span><span class="hljs-params">()</span> </span>&#123;  <br>    <span class="hljs-function">Json <span class="hljs-title">obj</span><span class="hljs-params">(Json::json_object)</span></span>;  <br>    <span class="hljs-type">char</span> ch = <span class="hljs-built_in">get_next_char</span>();  <br>    <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;&#125;&#x27;</span>) &#123;  <br>        <span class="hljs-keyword">return</span> obj;  <br>    &#125;  <br>    --m_idx;  <br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;  <br>        ch = <span class="hljs-built_in">get_next_char</span>();  <br>        <span class="hljs-keyword">if</span> (ch != <span class="hljs-string">&#x27;&quot;&#x27;</span>) &#123;  <br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">logic_error</span>(<span class="hljs-string">&quot;expected &#x27;\&quot;&#x27; in object&quot;</span>);  <br>        &#125;  <br>        string key = <span class="hljs-built_in">parse_string</span>();  <br>        <span class="hljs-comment">//相当于这个key是一个动态的  </span><br>        ch = <span class="hljs-built_in">get_next_char</span>();  <br>        <span class="hljs-keyword">if</span> (ch != <span class="hljs-string">&#x27;:&#x27;</span>) &#123;  <br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">logic_error</span>(<span class="hljs-string">&quot;expected &#x27;:&#x27; in object&quot;</span>);  <br>        &#125;  <br>        obj[key] = <span class="hljs-built_in">parse</span>();  <br>        ch = <span class="hljs-built_in">get_next_char</span>();  <br>        <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;&#125;&#x27;</span>) &#123;  <br>            <span class="hljs-keyword">break</span>;  <br>        &#125;  <br>        <span class="hljs-keyword">if</span> (ch != <span class="hljs-string">&#x27;,&#x27;</span>) &#123;  <br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">logic_error</span>(<span class="hljs-string">&quot;expected &#x27;,&#x27; in object&quot;</span>);  <br>        &#125;  <br>    &#125;  <br>    <span class="hljs-keyword">return</span> obj;  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="clion项目的位置">clion项目的位置</h3>
+<p>可以发现clion项目的当前位置实际上输出的是debug文件夹</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> buffer[<span class="hljs-number">1024</span>];  <br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">getcwd</span>(buffer, <span class="hljs-built_in">sizeof</span>(buffer)) != <span class="hljs-literal">nullptr</span>) &#123;  <br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Current directory is: &quot;</span> &lt;&lt; buffer &lt;&lt; std::endl;  <br>&#125; <span class="hljs-keyword">else</span> &#123;  <br>    std::cerr &lt;&lt; <span class="hljs-string">&quot;Failed to get current directory.&quot;</span> &lt;&lt; std::endl;  <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;  <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="basic-string-char">basic_string&lt;char&gt;</h3>
+<p><code>basic_string&lt;char&gt;</code>和<code>string</code>都是C++标准库中的字符串类型，它们都可以用于表示和操作字符串。</p>
+<p><code>basic_string&lt;char&gt;</code>是<code>std::basic_string</code>模板类的一个特化版本，用于表示一个由<code>char</code>类型组成的字符串。在实际使用中，我们通常使用<code>string</code>别名来表示<code>basic_string&lt;char&gt;</code>，即<code>typedef basic_string&lt;char&gt; string</code>。</p>
+<h3 id="字面值常量">字面值常量</h3>
+<p>这是因为C++中的字符串字面值常量（例如<code>&quot;data&quot;</code>）被视为<code>const char*</code>类型的指针，而不是<code>std::string</code>类型。因此，在调用<code>v[&quot;data&quot;]</code>时，编译器会自动将字符串字面值常量转换为<code>const char*</code>类型的指针，然后调用<code>Json &amp;Json::operator[](const char *key)</code>重载版本。</p>
+<h2 id="改进">改进</h2>
+<ul>
+<li>[ ] 使用智能指针</li>
+<li>[x] 移动构造</li>
+<li>[x] delete</li>
+<li>[x] 解决负号问题</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C/" class="category-chain-item">C++</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/json/">#json</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Json解释器</div>
+      <div>https://leoschopen.github.io/2023/03/21/Json解释器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Leo Schopen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/05/18/%E6%9E%90static%E7%9A%84%E8%8B%A5%E5%B9%B2%E5%9C%BA%E6%99%AF/" title="C++ 浅析static的若干注意事项与场景">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ 浅析static的若干注意事项与场景</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/31/%E6%95%B0%E7%BB%84%E5%90%8D%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E9%97%AE%E9%A2%98/" title="数组名作为函数参数的问题&amp;sizeof()函数">
+                        <span class="hidden-mobile">数组名作为函数参数的问题&amp;sizeof()函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
